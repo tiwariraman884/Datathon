@@ -1,0 +1,25 @@
+# Large data files
+data/creditcard.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+env/
+.venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Models
+models/*.pkl
+models/*.h5
+models/*.bin
+
+data/creditcard_tmp.csv
