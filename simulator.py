@@ -11,13 +11,13 @@ df = pd.read_csv('data/creditcard.csv')
 _tx_iter = cycle(df.sample(frac=1, random_state=42).itertuples(index=False))
 
 def get_next_transaction():
-    " Return a single transaction as a dict.
+    """Return a single transaction as a dict."""
     row = next(_tx_iter)
     cols = df.columns
     return {col: getattr(row, i) for i, col in enumerate(cols)}
 
 def stream_transactions(rate=1.0):
-    Yield transactions at ate tx/sec.
- while True:
- yield get_next_transaction()
- time.sleep(1.0 / rate)
+    """Yield transactions at rate tx/sec."""
+    while True:
+        yield get_next_transaction()
+        time.sleep(1.0 / rate)
