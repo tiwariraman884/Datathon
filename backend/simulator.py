@@ -86,6 +86,7 @@ def main():
 
         time.sleep(DELAY_SECONDS)
 
+
     # Final summary
     print("\n")
     print("=" * 60)
