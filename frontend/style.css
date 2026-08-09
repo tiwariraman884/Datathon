@@ -1391,3 +1391,36 @@ footer {
         width: 100%;
     }
 }
+/* =========================================================
+   PHASE 13 — FINAL UI TYPOGRAPHY POLISH
+   ========================================================= */
+
+/* KPI card labels */
+.kpi-top > span {
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+/* KPI card descriptions */
+.kpi-description {
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Risk card supporting text */
+.risk-info small {
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+/* Model card description */
+.model-score p {
+    font-size: 13px;
+    line-height: 1.55;
+}
+
+/* Footer */
+footer {
+    font-size: 12px;
+    line-height: 1.5;
+}

@@ -163,19 +163,7 @@ function updateDashboard(data) {
         riskDistribution.medium ?? 0;
 
     lowRiskEl.textContent =
-        riskDistribution.low ?? 0;
-
-    document.getElementById("analysisHighRisk").textContent =
-    riskDistribution.high ?? 0;
-
-    document.getElementById("analysisMediumRisk").textContent =
-        riskDistribution.medium ?? 0;
-
-    document.getElementById("analysisLowRisk").textContent =
-        riskDistribution.low ?? 0;
-
-    document.getElementById("analysisFraudCount").textContent =
-        overview.fraud_detected ?? 0;    
+        riskDistribution.low ?? 0; 
 
     // -----------------------------------------------------
     // RISK ANALYSIS PAGE
