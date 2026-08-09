@@ -98,6 +98,25 @@ async function loadDashboard() {
     }
 }
 
+function updateFraudAlert(fraudCount) {
+
+    const fraudAlert =
+        document.getElementById("fraudAlert");
+
+    if (!fraudAlert) {
+        return;
+    }
+
+    if (Number(fraudCount) > 0) {
+
+        fraudAlert.style.display = "flex";
+
+    } else {
+
+        fraudAlert.style.display = "none";
+
+    }
+}
 
 // =========================================================
 // UPDATE DASHBOARD
@@ -116,6 +135,10 @@ function updateDashboard(data) {
 
     fraudDetectedEl.textContent =
         overview.fraud_detected ?? 0;
+
+    updateFraudAlert(
+        overview.fraud_detected ?? 0
+    );    
 
     legitimateTransactionsEl.textContent =
         overview.legitimate_transactions ?? 0;
@@ -141,6 +164,160 @@ function updateDashboard(data) {
 
     lowRiskEl.textContent =
         riskDistribution.low ?? 0;
+
+    document.getElementById("analysisHighRisk").textContent =
+    riskDistribution.high ?? 0;
+
+    document.getElementById("analysisMediumRisk").textContent =
+        riskDistribution.medium ?? 0;
+
+    document.getElementById("analysisLowRisk").textContent =
+        riskDistribution.low ?? 0;
+
+    document.getElementById("analysisFraudCount").textContent =
+        overview.fraud_detected ?? 0;    
+
+    // -----------------------------------------------------
+    // RISK ANALYSIS PAGE
+    // -----------------------------------------------------
+
+const highRisk =
+    Number(riskDistribution.high ?? 0);
+
+const mediumRisk =
+    Number(riskDistribution.medium ?? 0);
+
+const lowRisk =
+    Number(riskDistribution.low ?? 0);
+
+const totalRiskTransactions =
+    highRisk + mediumRisk + lowRisk;
+
+
+// Risk summary cards
+const analysisHighRisk =
+    document.getElementById("analysisHighRisk");
+
+const analysisMediumRisk =
+    document.getElementById("analysisMediumRisk");
+
+const analysisLowRisk =
+    document.getElementById("analysisLowRisk");
+
+const analysisFraudCount =
+    document.getElementById("analysisFraudCount");
+
+
+// Update counts
+if (analysisHighRisk) {
+    analysisHighRisk.textContent =
+        highRisk;
+}
+
+if (analysisMediumRisk) {
+    analysisMediumRisk.textContent =
+        mediumRisk;
+}
+
+if (analysisLowRisk) {
+    analysisLowRisk.textContent =
+        lowRisk;
+}
+
+if (analysisFraudCount) {
+    analysisFraudCount.textContent =
+        overview.fraud_detected ?? 0;
+}
+
+
+// -----------------------------------------------------
+// RISK PERCENTAGES
+// -----------------------------------------------------
+
+const highPercentage =
+    totalRiskTransactions > 0
+        ? (highRisk / totalRiskTransactions) * 100
+        : 0;
+
+const mediumPercentage =
+    totalRiskTransactions > 0
+        ? (mediumRisk / totalRiskTransactions) * 100
+        : 0;
+
+const lowPercentage =
+    totalRiskTransactions > 0
+        ? (lowRisk / totalRiskTransactions) * 100
+        : 0;
+
+
+// Percentage text
+const highRiskPercent =
+    document.getElementById("highRiskPercent");
+
+const mediumRiskPercent =
+    document.getElementById("mediumRiskPercent");
+
+const lowRiskPercent =
+    document.getElementById("lowRiskPercent");
+
+
+if (highRiskPercent) {
+    highRiskPercent.textContent =
+        `${highPercentage.toFixed(1)}%`;
+}
+
+if (mediumRiskPercent) {
+    mediumRiskPercent.textContent =
+        `${mediumPercentage.toFixed(1)}%`;
+}
+
+if (lowRiskPercent) {
+    lowRiskPercent.textContent =
+        `${lowPercentage.toFixed(1)}%`;
+}
+
+
+// -----------------------------------------------------
+// RISK PROGRESS BARS
+// -----------------------------------------------------
+
+const highRiskBar =
+    document.getElementById("highRiskBar");
+
+const mediumRiskBar =
+    document.getElementById("mediumRiskBar");
+
+const lowRiskBar =
+    document.getElementById("lowRiskBar");
+
+
+if (highRiskBar) {
+    highRiskBar.style.width =
+        `${highPercentage}%`;
+}
+
+if (mediumRiskBar) {
+    mediumRiskBar.style.width =
+        `${mediumPercentage}%`;
+}
+
+if (lowRiskBar) {
+    lowRiskBar.style.width =
+        `${lowPercentage}%`;
+}
+
+
+// -----------------------------------------------------
+// DETECTION THRESHOLD
+// -----------------------------------------------------
+
+const analysisThreshold =
+    document.getElementById("analysisThreshold");
+
+if (analysisThreshold) {
+    analysisThreshold.textContent =
+        "35%";
+}
 
 
     // -----------------------------------------------------
@@ -500,33 +677,22 @@ if (transactionForm) {
                 }
 
 
-                // -------------------------------------------------
-                // READ PREDICTION
-                // -------------------------------------------------
+                const result = await response.json();
 
-                const result =
-                    await response.json();
+                console.log("Prediction result:", result);
 
-                console.log(
-                    "Prediction result:",
-                    result
-                );
+                // Show the latest prediction immediately
+                console.log("FINAL API RESULT:", result);
+                console.log("Prediction:", result.prediction);
+                console.log("Probability:", result.fraud_probability);
+                console.log("Risk:", result.risk_level);
 
+                showPredictionResult(result);
 
-                // -------------------------------------------------
-                // SHOW RESULT
-                // -------------------------------------------------
-
-                showPredictionResult(
-                    result
-                );
-
-
-                // -------------------------------------------------
-                // REFRESH DASHBOARD
-                // -------------------------------------------------
-
-                await loadDashboard();
+                // Refresh dashboard statistics
+                if (typeof loadDashboard === "function") {
+                    await loadDashboard();
+                }
 
             } catch (error) {
 
@@ -848,43 +1014,84 @@ fraudSampleBtn.addEventListener("click", async () => {
     }
 });
 
-sampleBtn.addEventListener("click", async () => {
-    try {
-        sampleBtn.disabled = true;
-        sampleBtn.textContent = "Loading...";
+// =========================================================
+// PAGE NAVIGATION
+// =========================================================
 
-        const response = await fetch(
-            `${API_URL}/sample-transaction`
-        );
+function showPage(pageId) {
+    const sections = document.querySelectorAll(".page-section");
+    const navItems = document.querySelectorAll(".nav-item");
 
-        if (!response.ok) {
-            throw new Error(`API error: ${response.status}`);
-        }
+    // Hide every page
+    sections.forEach(section => {
+        section.classList.remove("active");
+    });
 
-        const transaction = await response.json();
+    // Remove active state from every navigation item
+    navItems.forEach(item => {
+        item.classList.remove("active");
+    });
 
-        // Fill Amount
-        document.getElementById("amount").value =
-            transaction.Amount ?? 0;
+    // Find requested page
+    const target = document.getElementById(pageId);
 
-        // Fill Time
-        document.getElementById("time").value =
-            transaction.Time ?? 0;
-
-        // Fill V1 - V28
-        for (let i = 1; i <= 28; i++) {
-            document.getElementById(`V${i}`).value =
-                transaction[`V${i}`] ?? 0;
-        }
-
-        console.log("Sample transaction loaded:", transaction);
-
-    } catch (error) {
-        console.error("Sample transaction error:", error);
-        alert("Unable to load sample transaction.");
-
-    } finally {
-        sampleBtn.disabled = false;
-        sampleBtn.textContent = "Load Sample Transaction";
+    if (!target) {
+        console.error("Page not found:", pageId);
+        return;
     }
+
+    // Show requested page
+    target.classList.add("active");
+
+    // Activate corresponding navigation button
+    const activeNav = document.querySelector(
+        `.nav-item[href="#${pageId}"]`
+    );
+
+    if (activeNav) {
+        activeNav.classList.add("active");
+    }
+
+    console.log("Navigated to:", pageId);
+}
+
+
+// =========================================================
+// NAVIGATION CLICK EVENTS
+// =========================================================
+
+document.querySelectorAll(".nav-item").forEach(item => {
+
+    item.addEventListener("click", function (event) {
+
+        event.preventDefault();
+
+        const href = this.getAttribute("href");
+
+        if (!href || !href.startsWith("#")) {
+            return;
+        }
+
+        const pageId = href.substring(1);
+
+        showPage(pageId);
+
+        // Update URL without reloading
+        history.replaceState(
+            null,
+            "",
+            `#${pageId}`
+        );
+    });
+
 });
+
+
+// =========================================================
+// INITIAL PAGE
+// =========================================================
+
+const initialPage =
+    window.location.hash.substring(1) || "dashboard";
+
+showPage(initialPage);

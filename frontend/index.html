@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,48 +8,74 @@
     <title>IBM Z | Fraud Detection</title>
 
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="/favicon.png">
 </head>
 
 <body>
 
-    <!-- =========================
+    <!-- =====================================================
          SIDEBAR
-    ========================== -->
+    ====================================================== -->
 
     <aside class="sidebar">
 
         <div class="brand">
-            <div class="brand-icon">CC</div>
+
+            <div class="brand-icon">
+                CC
+            </div>
 
             <div>
                 <h2>CraditCard</h2>
                 <span>Fraud Intelligence</span>
             </div>
+
         </div>
+
+
+        <!-- Navigation -->
 
         <nav class="navigation">
 
-            <a href="#" class="nav-item active">
+            <a
+                href="#dashboard"
+                class="nav-item active"
+            >
                 <span>▦</span>
                 <span>Dashboard</span>
             </a>
 
-            <a href="#" class="nav-item">
+
+            <a
+                href="#transactions"
+                class="nav-item"
+            >
                 <span>↔</span>
                 <span>Transactions</span>
             </a>
 
-            <a href="#" class="nav-item">
+
+            <a
+                href="#risk-analysis"
+                class="nav-item"
+            >
                 <span>◈</span>
                 <span>Risk Analysis</span>
             </a>
 
-            <a href="#" class="nav-item">
+
+            <a
+                href="#system"
+                class="nav-item"
+            >
                 <span>⚙</span>
                 <span>System</span>
             </a>
 
         </nav>
+
+
+        <!-- System Status -->
 
         <div class="system-status">
 
@@ -64,225 +91,1153 @@
     </aside>
 
 
-    <!-- =========================
+    <!-- =====================================================
          MAIN CONTENT
-    ========================== -->
+    ====================================================== -->
 
     <main class="main-content">
 
-        <!-- HEADER -->
 
-        <header class="topbar">
+        <!-- =================================================
+             DASHBOARD PAGE
+        ================================================== -->
 
-            <div>
-                <p class="eyebrow">REAL-TIME SECURITY DITECTION</p>
+        <section
+            id="dashboard"
+            class="page-section active"
+        >
 
-                <h1>
-                    Fraud Detection
-                    <span>Dashboard</span>
-                </h1>
+            <!-- Dashboard Header -->
 
-                <p class="subtitle">
-                    AI-powered transaction monitoring and risk intelligence.
-                </p>
+            <header class="topbar">
+
+                <div>
+
+                    <p class="eyebrow">
+                        REAL-TIME SECURITY DITECTION
+                    </p>
+
+                    <h1>
+                        Fraud Detection
+                        <span>Dashboard</span>
+                    </h1>
+
+                    <p class="subtitle">
+                        AI-powered transaction monitoring and
+                        risk intelligence.
+                    </p>
+
+                </div>
+
+
+                <div class="header-actions">
+
+                    <div class="connection">
+
+                        <span class="status-dot"></span>
+
+                        API ONLINE
+
+                    </div>
+
+
+                    <button
+                        id="refreshBtn"
+                        class="refresh-btn"
+                        type="button"
+                    >
+                        ↻ Refresh
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- =================================================
+                 KPI CARDS
+            ================================================== -->
+
+            <section class="kpi-grid">
+
+                <!-- Total Transactions -->
+
+                <div class="kpi-card">
+
+                    <div class="kpi-top">
+
+                        <span>
+                            Total Transactions
+                        </span>
+
+                        <div class="kpi-icon">
+                            ↔
+                        </div>
+
+                    </div>
+
+                    <h2 id="totalTransactions">
+                        0
+                    </h2>
+
+                    <p class="kpi-description">
+                        Transactions analyzed
+                    </p>
+
+                </div>
+
+
+                <!-- Fraud Detected -->
+
+                <div class="kpi-card danger">
+
+                    <div class="kpi-top">
+
+                        <span>
+                            Fraud Detected
+                        </span>
+
+                        <div class="kpi-icon">
+                            !
+                        </div>
+
+                    </div>
+
+                    <h2 id="fraudDetected">
+                        0
+                    </h2>
+
+                    <p class="kpi-description">
+                        Suspicious transactions
+                    </p>
+
+                </div>
+
+
+                <!-- Legitimate -->
+
+                <div class="kpi-card success">
+
+                    <div class="kpi-top">
+
+                        <span>
+                            Legitimate
+                        </span>
+
+                        <div class="kpi-icon">
+                            ✓
+                        </div>
+
+                    </div>
+
+                    <h2 id="legitimateTransactions">
+                        0
+                    </h2>
+
+                    <p class="kpi-description">
+                        Safe transactions
+                    </p>
+
+                </div>
+
+
+                <!-- Fraud Rate -->
+
+                <div class="kpi-card warning">
+
+                    <div class="kpi-top">
+
+                        <span>
+                            Fraud Rate
+                        </span>
+
+                        <div class="kpi-icon">
+                            %
+                        </div>
+
+                    </div>
+
+                    <h2 id="fraudRate">
+                        0%
+                    </h2>
+
+                    <p class="kpi-description">
+                        Current detection rate
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 RISK OVERVIEW
+            ================================================== -->
+
+            <section class="dashboard-grid">
+
+                <!-- Risk Distribution -->
+
+                <div class="panel risk-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-label">
+                                RISK DISTRIBUTION
+                            </p>
+
+                            <h2>
+                                Threat Overview
+                            </h2>
+
+                        </div>
+
+
+                        <span class="live-badge">
+                            ● LIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="risk-container">
+
+                        <!-- High -->
+
+                        <div class="risk-item high">
+
+                            <div class="risk-info">
+
+                                <span class="risk-indicator"></span>
+
+                                <div>
+
+                                    <strong>
+                                        High Risk
+                                    </strong>
+
+                                    <small>
+                                        Critical transactions
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="highRisk">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Medium -->
+
+                        <div class="risk-item medium">
+
+                            <div class="risk-info">
+
+                                <span class="risk-indicator"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Medium Risk
+                                    </strong>
+
+                                    <small>
+                                        Requires review
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="mediumRisk">
+                                0
+                            </strong>
+
+                        </div>
+
+
+                        <!-- Low -->
+
+                        <div class="risk-item low">
+
+                            <div class="risk-info">
+
+                                <span class="risk-indicator"></span>
+
+                                <div>
+
+                                    <strong>
+                                        Low Risk
+                                    </strong>
+
+                                    <small>
+                                        Normal activity
+                                    </small>
+
+                                </div>
+
+                            </div>
+
+
+                            <strong id="lowRisk">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     MODEL STATUS
+                ================================================== -->
+
+                <div class="panel model-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <p class="panel-label">
+                                AI MODEL
+                            </p>
+
+                            <h2>
+                                Detection Engine
+                            </h2>
+
+                        </div>
+
+
+                        <span class="model-status">
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="model-content">
+
+                        <div class="model-score">
+
+                            <div class="score-ring">
+                                <span>0.35</span>
+                            </div>
+
+
+                            <div>
+
+                                <strong>
+                                    Detection Threshold
+                                </strong>
+
+                                <p>
+                                    Transactions above this
+                                    probability are classified
+                                    as fraud.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="model-details">
+
+                            <div>
+
+                                <span>
+                                    Model
+                                </span>
+
+                                <strong>
+                                    Random Forest
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    Features
+                                </span>
+
+                                <strong>
+                                    30
+                                </strong>
+
+                            </div>
+
+
+                            <div>
+
+                                <span>
+                                    PR-AUC
+                                </span>
+
+                                <strong>
+                                    0.801
+                                </strong>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </section>
+
+
+        <!-- =====================================================
+             TRANSACTIONS PAGE
+        ====================================================== -->
+
+        <section
+            id="transactions"
+            class="page-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        TRANSACTION MONITOR
+                    </span>
+
+                    <h2>
+                        Recent Transactions
+                    </h2>
+
+                    <p>
+                        Monitor recently analyzed transactions
+                        and their fraud risk.
+                    </p>
+
+                </div>
+
+                <span
+                    id="transactionCount"
+                    class="transaction-count"
+                >
+                    0 transactions
+                </span>
+
             </div>
 
-            <div class="header-actions">
 
-                <div class="connection">
+            <!-- =================================================
+                 TRANSACTION TABLE
+            ================================================== -->
+
+            <div class="panel">
+
+                <div class="table-wrapper">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    ID
+                                </th>
+
+                                <th>
+                                    Amount
+                                </th>
+
+                                <th>
+                                    Fraud Probability
+                                </th>
+
+                                <th>
+                                    Prediction
+                                </th>
+
+                                <th>
+                                    Risk Level
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="transactionTable">
+
+                            <tr>
+
+                                <td
+                                    colspan="5"
+                                    class="empty-state"
+                                >
+                                    Loading transactions...
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 TRANSACTION ANALYZER
+            ================================================== -->
+
+            <section class="analyzer-section">
+
+                <div class="section-header">
+
+                    <div>
+
+                        <span class="section-label">
+                            TRANSACTION ANALYZER
+                        </span>
+
+                        <h2>
+                            Analyze a Transaction
+                        </h2>
+
+                        <p>
+                            Submit transaction features to the
+                            fraud detection model.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <form
+                    id="transactionForm"
+                    class="transaction-form"
+                >
+
+                    <!-- Basic Fields -->
+
+                    <div class="basic-fields">
+
+                        <div class="form-group">
+
+                            <label for="amount">
+                                Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                id="amount"
+                                name="Amount"
+                                step="any"
+                                value="0"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="time">
+                                Time
+                            </label>
+
+                            <input
+                                type="number"
+                                id="time"
+                                name="Time"
+                                step="any"
+                                value="0"
+                            >
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- V1 - V28 generated by app.js -->
+
+                    <div class="transaction-actions">
+
+                        <div
+                            class="features-grid"
+                            id="featuresGrid"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- Sample Transaction -->
+
+                    <button
+                        type="button"
+                        id="sampleBtn"
+                        class="secondary-btn"
+                    >
+                        Load Sample Transaction
+                    </button>
+
+
+                    <!-- Fraud Transaction -->
+
+                    <button
+                        type="button"
+                        id="fraudSampleBtn"
+                        class="fraud-btn"
+                    >
+                        Load Fraud Transaction
+                    </button>
+
+
+                    <!-- Analyze -->
+
+                    <button
+                        type="submit"
+                        id="analyzeBtn"
+                    >
+                        Analyze Transaction
+                    </button>
+
+                </form>
+
+
+                <!-- Prediction Result -->
+
+                <div
+                    id="predictionResult"
+                    class="prediction-result hidden"
+                ></div>
+
+            </section>
+
+        </section>
+
+
+        <!-- =====================================================
+             RISK ANALYSIS PAGE
+        ====================================================== -->
+
+        <section
+            id="risk-analysis"
+            class="page-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        RISK INTELLIGENCE
+                    </span>
+
+                    <h2>
+                        Risk Analysis
+                    </h2>
+
+                    <p>
+                        Analyze transaction risk distribution
+                        and fraud activity.
+                    </p>
+
+                </div>
+
+
+                <div class="live-status">
+
                     <span class="status-dot"></span>
-                    API ONLINE
+
+                    LIVE
+
                 </div>
-
-                <button id="refreshBtn" class="refresh-btn">
-                    ↻ Refresh
-                </button>
-
-            </div>
-
-        </header>
-
-
-        <!-- =========================
-             KPI CARDS
-        ========================== -->
-
-        <section class="kpi-grid">
-
-            <div class="kpi-card">
-
-                <div class="kpi-top">
-                    <span>Total Transactions</span>
-                    <div class="kpi-icon">↔</div>
-                </div>
-
-                <h2 id="totalTransactions">0</h2>
-
-                <p class="kpi-description">
-                    Transactions analyzed
-                </p>
 
             </div>
 
 
-            <div class="kpi-card danger">
+            <!-- =================================================
+                 RISK SUMMARY
+            ================================================== -->
 
-                <div class="kpi-top">
-                    <span>Fraud Detected</span>
-                    <div class="kpi-icon">!</div>
+            <div class="risk-summary-grid">
+
+                <!-- High -->
+
+                <div class="risk-card high-risk">
+
+                    <span class="risk-card-label">
+                        HIGH RISK
+                    </span>
+
+                    <strong id="analysisHighRisk">
+                        0
+                    </strong>
+
+                    <span>
+                        Critical transactions
+                    </span>
+
                 </div>
 
-                <h2 id="fraudDetected">0</h2>
 
-                <p class="kpi-description">
-                    Suspicious transactions
-                </p>
+                <!-- Medium -->
+
+                <div class="risk-card medium-risk">
+
+                    <span class="risk-card-label">
+                        MEDIUM RISK
+                    </span>
+
+                    <strong id="analysisMediumRisk">
+                        0
+                    </strong>
+
+                    <span>
+                        Requires review
+                    </span>
+
+                </div>
+
+
+                <!-- Low -->
+
+                <div class="risk-card low-risk">
+
+                    <span class="risk-card-label">
+                        LOW RISK
+                    </span>
+
+                    <strong id="analysisLowRisk">
+                        0
+                    </strong>
+
+                    <span>
+                        Normal activity
+                    </span>
+
+                </div>
+
+
+                <!-- Fraud -->
+
+                <div class="risk-card fraud-risk">
+
+                    <span class="risk-card-label">
+                        FRAUD DETECTED
+                    </span>
+
+                    <strong id="analysisFraudCount">
+                        0
+                    </strong>
+
+                    <span>
+                        Confirmed suspicious transactions
+                    </span>
+
+                </div>
 
             </div>
 
 
-            <div class="kpi-card success">
+            <!-- =================================================
+                 ANALYSIS GRID
+            ================================================== -->
 
-                <div class="kpi-top">
-                    <span>Legitimate</span>
-                    <div class="kpi-icon">✓</div>
+            <div class="analysis-grid">
+
+                <!-- Risk Distribution -->
+
+                <div class="analysis-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="section-label">
+                                THREAT OVERVIEW
+                            </span>
+
+                            <h3>
+                                Risk Distribution
+                            </h3>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="risk-bars">
+
+                        <!-- High -->
+
+                        <div class="risk-bar-row">
+
+                            <div class="risk-bar-info">
+
+                                <span>
+                                    High Risk
+                                </span>
+
+                                <strong id="highRiskPercent">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="risk-bar-track">
+
+                                <div
+                                    id="highRiskBar"
+                                    class="risk-bar-fill high"
+                                    style="width: 0%"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Medium -->
+
+                        <div class="risk-bar-row">
+
+                            <div class="risk-bar-info">
+
+                                <span>
+                                    Medium Risk
+                                </span>
+
+                                <strong id="mediumRiskPercent">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="risk-bar-track">
+
+                                <div
+                                    id="mediumRiskBar"
+                                    class="risk-bar-fill medium"
+                                    style="width: 0%"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Low -->
+
+                        <div class="risk-bar-row">
+
+                            <div class="risk-bar-info">
+
+                                <span>
+                                    Low Risk
+                                </span>
+
+                                <strong id="lowRiskPercent">
+                                    0%
+                                </strong>
+
+                            </div>
+
+
+                            <div class="risk-bar-track">
+
+                                <div
+                                    id="lowRiskBar"
+                                    class="risk-bar-fill low"
+                                    style="width: 0%"
+                                ></div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <h2 id="legitimateTransactions">0</h2>
 
-                <p class="kpi-description">
-                    Safe transactions
-                </p>
+                <!-- =================================================
+                     MODEL INTELLIGENCE
+                ================================================== -->
+
+                <div class="analysis-panel">
+
+                    <div class="panel-header">
+
+                        <div>
+
+                            <span class="section-label">
+                                MODEL INTELLIGENCE
+                            </span>
+
+                            <h3>
+                                Detection Engine
+                            </h3>
+
+                        </div>
+
+
+                        <span class="engine-status">
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="model-details">
+
+                        <div class="model-detail">
+
+                            <span>
+                                Model
+                            </span>
+
+                            <strong>
+                                Random Forest
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                Features
+                            </span>
+
+                            <strong>
+                                30
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                Detection Threshold
+                            </span>
+
+                            <strong id="analysisThreshold">
+                                35%
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                PR-AUC
+                            </span>
+
+                            <strong>
+                                0.801
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
 
 
-            <div class="kpi-card warning">
+            <!-- =================================================
+                 FRAUD ALERT
+            ================================================== -->
 
-                <div class="kpi-top">
-                    <span>Fraud Rate</span>
-                    <div class="kpi-icon">%</div>
+            <div
+                id="fraudAlert"
+                class="fraud-alert"
+                style="display: none;"
+            >
+
+                <div class="fraud-alert-icon">
+                    !
                 </div>
 
-                <h2 id="fraudRate">0%</h2>
 
-                <p class="kpi-description">
-                    Current detection rate
-                </p>
+                <div>
+
+                    <strong>
+                        Fraud Activity Detected
+                    </strong>
+
+                    <p>
+                        One or more transactions have exceeded
+                        the configured detection threshold.
+                    </p>
+
+                </div>
 
             </div>
 
         </section>
 
 
-        <!-- =========================
-             RISK OVERVIEW
-        ========================== -->
+        <!-- =====================================================
+             SYSTEM PAGE
+        ====================================================== -->
 
-        <section class="dashboard-grid">
+        <section
+            id="system"
+            class="page-section"
+        >
 
-            <div class="panel risk-panel">
+            <div class="section-header">
 
-                <div class="panel-header">
+                <div>
 
-                    <div>
-                        <p class="panel-label">RISK DISTRIBUTION</p>
-                        <h2>Threat Overview</h2>
-                    </div>
-
-                    <span class="live-badge">
-                        ● LIVE
+                    <span class="section-label">
+                        SYSTEM
                     </span>
+
+                    <h2>
+                        System Status
+                    </h2>
+
+                    <p>
+                        Monitor the fraud detection system
+                        and API connection.
+                    </p>
 
                 </div>
 
+                <div class="live-status">
 
-                <div class="risk-container">
+                    <span class="status-dot"></span>
 
-                    <div class="risk-item high">
-
-                        <div class="risk-info">
-                            <span class="risk-indicator"></span>
-
-                            <div>
-                                <strong>High Risk</strong>
-                                <small>Critical transactions</small>
-                            </div>
-                        </div>
-
-                        <strong id="highRisk">0</strong>
-
-                    </div>
-
-
-                    <div class="risk-item medium">
-
-                        <div class="risk-info">
-                            <span class="risk-indicator"></span>
-
-                            <div>
-                                <strong>Medium Risk</strong>
-                                <small>Requires review</small>
-                            </div>
-                        </div>
-
-                        <strong id="mediumRisk">0</strong>
-
-                    </div>
-
-
-                    <div class="risk-item low">
-
-                        <div class="risk-info">
-                            <span class="risk-indicator"></span>
-
-                            <div>
-                                <strong>Low Risk</strong>
-                                <small>Normal activity</small>
-                            </div>
-                        </div>
-
-                        <strong id="lowRisk">0</strong>
-
-                    </div>
+                    ONLINE
 
                 </div>
 
             </div>
 
 
-            <!-- MODEL STATUS -->
+            <div class="analysis-grid">
 
-            <div class="panel model-panel">
+                <div class="analysis-panel">
 
-                <div class="panel-header">
+                    <div class="panel-header">
 
-                    <div>
-                        <p class="panel-label">AI MODEL</p>
-                        <h2>Detection Engine</h2>
+                        <div>
+
+                            <span class="section-label">
+                                API STATUS
+                            </span>
+
+                            <h3>
+                                Backend Connection
+                            </h3>
+
+                        </div>
+
+                        <span class="engine-status">
+                            CONNECTED
+                        </span>
+
                     </div>
 
-                    <span class="model-status">
-                        ACTIVE
-                    </span>
+
+                    <div class="model-details">
+
+                        <div class="model-detail">
+
+                            <span>
+                                API
+                            </span>
+
+                            <strong>
+                                ONLINE
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                Model
+                            </span>
+
+                            <strong>
+                                Random Forest
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                Features
+                            </span>
+
+                            <strong>
+                                30
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                Threshold
+                            </span>
+
+                            <strong>
+                                35%
+                            </strong>
+
+                        </div>
+
+                    </div>
 
                 </div>
 
 
-                <div class="model-content">
+                <div class="analysis-panel">
 
-                    <div class="model-score">
-
-                        <div class="score-ring">
-                            <span>0.35</span>
-                        </div>
+                    <div class="panel-header">
 
                         <div>
-                            <strong>Detection Threshold</strong>
-                            <p>
-                                Transactions above this probability
-                                are classified as fraud.
-                            </p>
+
+                            <span class="section-label">
+                                SYSTEM INFORMATION
+                            </span>
+
+                            <h3>
+                                Fraud Detection Engine
+                            </h3>
+
                         </div>
 
                     </div>
@@ -290,19 +1245,55 @@
 
                     <div class="model-details">
 
-                        <div>
-                            <span>Model</span>
-                            <strong>Random Forest</strong>
+                        <div class="model-detail">
+
+                            <span>
+                                Detection Engine
+                            </span>
+
+                            <strong>
+                                ACTIVE
+                            </strong>
+
                         </div>
 
-                        <div>
-                            <span>Features</span>
-                            <strong>30</strong>
+
+                        <div class="model-detail">
+
+                            <span>
+                                ML Model
+                            </span>
+
+                            <strong>
+                                Random Forest
+                            </strong>
+
                         </div>
 
-                        <div>
-                            <span>PR-AUC</span>
-                            <strong>0.801</strong>
+
+                        <div class="model-detail">
+
+                            <span>
+                                PR-AUC
+                            </span>
+
+                            <strong>
+                                0.801
+                            </strong>
+
+                        </div>
+
+
+                        <div class="model-detail">
+
+                            <span>
+                                Monitoring
+                            </span>
+
+                            <strong>
+                                REAL-TIME
+                            </strong>
+
                         </div>
 
                     </div>
@@ -314,147 +1305,9 @@
         </section>
 
 
-        <!-- =========================
-             RECENT TRANSACTIONS
-        ========================== -->
-
-        <section class="panel transactions-panel">
-
-            <div class="panel-header">
-
-                <div>
-                    <p class="panel-label">TRANSACTION MONITOR</p>
-                    <h2>Recent Transactions</h2>
-                </div>
-
-                <span id="transactionCount" class="transaction-count">
-                    0 transactions
-                </span>
-
-            </div>
-
-
-            <div class="table-wrapper">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-                            <th>ID</th>
-                            <th>Amount</th>
-                            <th>Fraud Probability</th>
-                            <th>Prediction</th>
-                            <th>Risk Level</th>
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody id="transactionTable">
-
-                        <tr>
-
-                            <td colspan="5" class="empty-state">
-                                Loading transactions...
-                            </td>
-
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </section>
-
-        
-    <!-- Transaction Analyzer -->
-<section class="analyzer-section">
-
-    <div class="section-header">
-        <span class="section-label">TRANSACTION ANALYZER</span>
-
-        <h2>Analyze a Transaction</h2>
-
-        <p>
-            Submit transaction features to the fraud detection model.
-        </p>
-    </div>
-
-    <form id="transactionForm" class="transaction-form">
-
-        <!-- Basic transaction information -->
-        <div class="basic-fields">
-
-            <div class="form-group">
-                <label for="amount">Amount</label>
-
-                <input
-                    type="number"
-                    id="amount"
-                    step="any"
-                    value="0"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label for="time">Time</label>
-
-                <input
-                    type="number"
-                    id="time"
-                    name="Time"
-                    step="any"
-                    value="0"
-                >
-            </div>
-
-        </div>
-
-        <!-- V1 - V28 will be generated by JavaScript -->
-        <div class="transaction-actions">
-            <div class="features-grid" id="featuresGrid"></div>
-        </div>
-        <button
-            type="button"
-            id="sampleBtn"
-            class="secondary-btn"
->
-            Load Sample Transaction
-        </button>
-
-        <button
-            type="button"
-            id="fraudSampleBtn"
-            class="fraud-btn"
->
-            Load Fraud Transaction
-        </button>
-
-        <button
-            type="submit"
-            id="analyzeBtn"
->           
-            Analyze Transaction
-        </button>
-
-    </form>
-
-    <!-- Prediction result appears here -->
-    <div
-        id="predictionResult"
-        class="prediction-result hidden">
-    </div>
-
-</section>
-
-
-        <!-- =========================
+        <!-- =====================================================
              FOOTER
-        ========================== -->
+        ====================================================== -->
 
         <footer>
 
@@ -471,7 +1324,12 @@
     </main>
 
 
+    <!-- =====================================================
+         JAVASCRIPT
+    ====================================================== -->
+
     <script src="app.js"></script>
 
 </body>
+
 </html>

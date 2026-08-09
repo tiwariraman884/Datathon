@@ -615,6 +615,249 @@ body {
     box-shadow: 0 0 10px rgba(54, 211, 153, 0.5);
 }
 
+/* =====================================================
+   RISK ANALYSIS
+===================================================== */
+
+.risk-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+}
+
+.risk-card {
+    padding: 22px;
+    border-radius: 16px;
+    background: #11161d;
+    border: 1px solid #252c35;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.risk-card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.risk-card strong {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.risk-card span:last-child {
+    color: #8b95a3;
+    font-size: 13px;
+}
+
+
+/* =====================================================
+   ANALYSIS GRID
+===================================================== */
+
+.analysis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.analysis-panel {
+    background: #11161d;
+    border: 1px solid #252c35;
+    border-radius: 16px;
+    padding: 24px;
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.panel-header h3 {
+    margin: 6px 0 0;
+    font-size: 20px;
+}
+
+
+/* =====================================================
+   RISK BARS
+===================================================== */
+
+.risk-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.risk-bar-row {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.risk-bar-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+}
+
+.risk-bar-info strong {
+    font-size: 13px;
+}
+
+.risk-bar-track {
+    width: 100%;
+    height: 9px;
+    background: #20262e;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.risk-bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 999px;
+    transition: width 0.5s ease;
+}
+
+.risk-bar-fill.high {
+    background: #ff4d6d;
+}
+
+.risk-bar-fill.medium {
+    background: #f5a623;
+}
+
+.risk-bar-fill.low {
+    background: #25d695;
+}
+
+
+/* =====================================================
+   MODEL INFORMATION
+===================================================== */
+
+.model-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+.model-detail {
+    padding: 16px;
+    border-radius: 12px;
+    background: #0c1117;
+    border: 1px solid #20262e;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.model-detail span {
+    font-size: 11px;
+    color: #7f8997;
+}
+
+.model-detail strong {
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   ENGINE STATUS
+===================================================== */
+
+.engine-status {
+    font-size: 11px;
+    font-weight: 700;
+    color: #25d695;
+    letter-spacing: 1px;
+}
+
+
+/* =====================================================
+   FRAUD ALERT
+===================================================== */
+
+.fraud-alert {
+    margin-top: 20px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    background: rgba(255, 77, 109, 0.08);
+    border: 1px solid rgba(255, 77, 109, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.fraud-alert-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff4d6d;
+    color: white;
+    font-weight: 800;
+}
+
+.fraud-alert strong {
+    color: #ff6b82;
+}
+
+.fraud-alert p {
+    margin: 5px 0 0;
+    color: #8b95a3;
+    font-size: 13px;
+}
+
+/* =========================================================
+   PAGE SECTION NAVIGATION
+   ========================================================= */
+
+.page-section {
+    display: none;
+    width: 100%;
+}
+
+.page-section.active {
+    display: block;
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+    .risk-summary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .analysis-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .risk-summary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .model-details {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* =========================================================
    MODEL PANEL
