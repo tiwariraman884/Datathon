@@ -85,7 +85,7 @@
             rgba(8, 145, 178, 0.12),
             transparent
         ),
-        linear-gradient(rgba(241, 245, 251, 0.85), rgba(241, 245, 251, 0.85)),
+        linear-gradient(rgba(241, 245, 251, 0.45), rgba(241, 245, 251, 0.45)),
         url('assets/cyber_bg.png') center/cover fixed;
     color: var(--text);
 }
