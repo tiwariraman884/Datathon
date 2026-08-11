@@ -1620,6 +1620,24 @@ function handleSelectedDocument(file) {
 
 
     if (documentVerificationResult) {
+        documentVerificationResult.style.display = "flex";
+        documentVerificationResult.innerHTML = `
+            <div class="document-result-icon">
+                ↑
+            </div>
+            <strong>
+                Document ready
+            </strong>
+            <p>
+                Click "Verify Document" to begin.
+            </p>
+        `;
+    }
+
+    if (documentVerificationDetails) {
+        documentVerificationDetails.style.display = "none";
+    }
+
     docVerified = false;
     checkKycCompletion();
 }
