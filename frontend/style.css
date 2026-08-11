@@ -1626,7 +1626,58 @@ footer {
 .document-upload-panel,
 .document-result-panel {
     min-height: 430px;
+    overflow: hidden;
 }
+
+
+/* =========================================================
+   DOCUMENT VERIFICATION METADATA GRID
+   (File / Type / Size / SHA-256 cells inside result panel)
+========================================================= */
+
+.doc-meta-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.doc-meta-cell {
+    padding: 11px 12px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.doc-meta-cell span {
+    display: block;
+    color: #657286;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.doc-meta-cell strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
 
 
 .document-drop-zone {
