@@ -2014,3 +2014,559 @@ footer {
     }
 
 }
+
+
+/* =========================================================
+   IP RISK BANNER & BADGE
+========================================================= */
+
+.ip-risk-banner {
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 12px 16px 0;
+    padding: 12px 14px;
+    background: rgba(239, 68, 68, 0.12);
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    border-radius: 10px;
+}
+
+.ip-risk-banner.visible {
+    display: flex;
+}
+
+.ip-risk-banner-icon {
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.ip-risk-banner-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.ip-risk-banner-body strong {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #ef4444;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
+}
+
+.ip-risk-banner-body span {
+    font-size: 11px;
+    opacity: 0.75;
+    line-height: 1.4;
+}
+
+.ip-risk-banner-dismiss {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: color 0.2s;
+}
+
+.ip-risk-banner-dismiss:hover {
+    color: #fff;
+}
+
+.ip-risk-badge {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: rgba(239, 68, 68, 0.15);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #ef4444;
+    letter-spacing: 0.06em;
+}
+
+.ip-risk-badge.visible {
+    display: flex;
+}
+
+.ip-risk-badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ef4444;
+    animation: pulse 1.5s infinite;
+}
+
+
+/* =========================================================
+   CUSTOMER ONBOARDING — INITIAL RISK CHECK
+========================================================= */
+
+.risk-check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 24px;
+}
+
+.risk-check-form-panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px;
+}
+
+.risk-check-form-panel h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: #fff;
+}
+
+.risk-check-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.risk-check-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.risk-check-field label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    opacity: 0.6;
+    text-transform: uppercase;
+}
+
+.risk-check-field input {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    padding: 10px 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.risk-check-field input:focus {
+    border-color: rgba(99, 102, 241, 0.6);
+}
+
+.risk-check-field input::placeholder {
+    opacity: 0.4;
+}
+
+.risk-check-detected {
+    font-size: 10px;
+    padding: 2px 8px;
+    background: rgba(99, 102, 241, 0.2);
+    border-radius: 10px;
+    color: rgba(255,255,255,0.7);
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.risk-check-run-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 12px;
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    border: none;
+    border-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.risk-check-run-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.risk-check-result-panel {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+}
+
+.risk-check-result-panel h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    color: #fff;
+}
+
+.risk-check-empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    opacity: 0.45;
+    padding: 20px 0;
+}
+
+.risk-check-empty-icon {
+    font-size: 36px;
+}
+
+.risk-check-empty strong {
+    font-size: 15px;
+}
+
+.risk-check-empty p {
+    font-size: 13px;
+    margin: 0;
+}
+
+.decision-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 28px 20px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid transparent;
+    animation: kycFadeIn 0.35s ease;
+}
+
+.decision-card.pass {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.decision-card.review {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.decision-card.decline {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+.decision-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 900;
+}
+
+.decision-card.pass .decision-card-icon { background: rgba(16,185,129,0.2); color: #10b981; }
+.decision-card.review .decision-card-icon { background: rgba(245,158,11,0.2); color: #f59e0b; }
+.decision-card.decline .decision-card-icon { background: rgba(239,68,68,0.2); color: #ef4444; }
+
+.decision-card-label {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+}
+
+.decision-card.pass .decision-card-label { color: #10b981; }
+.decision-card.review .decision-card-label { color: #f59e0b; }
+.decision-card.decline .decision-card-label { color: #ef4444; }
+
+.decision-card-reason {
+    font-size: 13px;
+    opacity: 0.7;
+    line-height: 1.5;
+    max-width: 280px;
+    margin: 0;
+}
+
+.decision-card-reasons {
+    width: 100%;
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: left;
+}
+
+.decision-card-reasons li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 12px;
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   KYC STEP TRACKER
+========================================================= */
+
+.kyc-stepper {
+    display: flex;
+    align-items: center;
+    margin-bottom: 28px;
+    padding: 20px 24px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 14px;
+}
+
+.kyc-step {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.kyc-step-node {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    border: 2px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.3);
+    background: transparent;
+    transition: all 0.35s ease;
+    flex-shrink: 0;
+}
+
+.kyc-step-label {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.kyc-step-label strong {
+    font-size: 12px;
+    font-weight: 700;
+    color: rgba(255,255,255,0.35);
+    transition: color 0.35s ease;
+    white-space: nowrap;
+}
+
+.kyc-step-label span {
+    font-size: 10px;
+    opacity: 0.4;
+    transition: opacity 0.35s ease;
+    white-space: nowrap;
+}
+
+.kyc-step-connector {
+    flex: 1;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    margin: 0 12px;
+    border-radius: 2px;
+    overflow: hidden;
+    min-width: 24px;
+    position: relative;
+}
+
+.kyc-step-connector-fill {
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 0%;
+    background: linear-gradient(90deg, #6366f1, #10b981);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+}
+
+.kyc-step.active .kyc-step-node {
+    border-color: #6366f1;
+    background: rgba(99, 102, 241, 0.15);
+    color: #6366f1;
+    box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+}
+
+.kyc-step.active .kyc-step-label strong {
+    color: #6366f1;
+}
+
+.kyc-step.active .kyc-step-label span {
+    opacity: 0.7;
+}
+
+.kyc-step.completed .kyc-step-node {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+}
+
+.kyc-step.completed .kyc-step-label strong {
+    color: #10b981;
+}
+
+.kyc-step.completed .kyc-step-label span {
+    opacity: 0.7;
+}
+
+
+/* =========================================================
+   SELFIE UPLOAD PANEL
+========================================================= */
+
+.document-verification-grid.three-col {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.selfie-preview-img {
+    width: 100%;
+    max-height: 130px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-top: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: none;
+}
+
+.selfie-preview-img.visible {
+    display: block;
+}
+
+.selfie-status-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-top: 10px;
+}
+
+.selfie-status-tag.verified {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.selfie-status-tag.error {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+
+/* =========================================================
+   APPROVE / DECLINE DOCUMENT DECISION CARD
+========================================================= */
+
+.doc-decision-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 16px;
+    border-radius: 14px;
+    text-align: center;
+    border: 1px solid transparent;
+    margin-bottom: 16px;
+    animation: kycFadeIn 0.35s ease;
+}
+
+.doc-decision-card.approved {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.35);
+}
+
+.doc-decision-card.declined {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: rgba(239, 68, 68, 0.35);
+}
+
+.doc-decision-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 900;
+}
+
+.doc-decision-card.approved .doc-decision-icon { background: rgba(16,185,129,0.2); color: #10b981; }
+.doc-decision-card.declined .doc-decision-icon { background: rgba(239,68,68,0.2); color: #ef4444; }
+
+.doc-decision-label {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.doc-decision-card.approved .doc-decision-label { color: #10b981; }
+.doc-decision-card.declined .doc-decision-label { color: #ef4444; }
+
+.doc-decision-sub {
+    font-size: 12px;
+    opacity: 0.6;
+    line-height: 1.5;
+    margin: 0;
+}
+
+
+/* =========================================================
+   RESPONSIVE — NEW FEATURES
+========================================================= */
+
+@media (max-width: 1100px) {
+    .document-verification-grid.three-col {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 900px) {
+    .risk-check-grid { grid-template-columns: 1fr; }
+    .document-verification-grid.three-col { grid-template-columns: 1fr; }
+
+    .kyc-stepper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .kyc-step-connector {
+        width: 2px;
+        height: 20px;
+        margin: 0 17px;
+        min-width: unset;
+    }
+}
+
+@keyframes kycFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}

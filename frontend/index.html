@@ -40,7 +40,16 @@
                 <span>Dashboard</span>
             </a>
 
-            
+
+            <a
+                href="#customer-onboarding"
+                class="nav-item"
+            >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span>Customer Onboarding</span>
+            </a>
+
+
             <a
                 href="#document-verification"
                 class="nav-item"
@@ -93,6 +102,29 @@
             </a>
 
         </nav>
+
+
+        <!-- IP Risk Banner -->
+
+        <div id="ipRiskBanner" class="ip-risk-banner">
+
+            <span class="ip-risk-banner-icon">⚠️</span>
+
+            <div class="ip-risk-banner-body">
+                <strong>HIGH-RISK LOCATION</strong>
+                <span id="ipRiskBannerText">Your IP originates from a flagged jurisdiction.</span>
+            </div>
+
+            <button
+                type="button"
+                class="ip-risk-banner-dismiss"
+                id="ipRiskBannerDismiss"
+                title="Dismiss"
+            >
+                ✕
+            </button>
+
+        </div>
 
 
         <!-- System Status -->
@@ -151,6 +183,16 @@
 
 
                 <div class="header-actions">
+
+                    <span
+                        id="ipRiskBadge"
+                        class="ip-risk-badge"
+                        title="Your IP is from a high-risk jurisdiction"
+                    >
+                        <span class="ip-risk-badge-dot"></span>
+                        HIGH-RISK IP
+                    </span>
+
 
                     <div class="connection">
 
@@ -754,6 +796,147 @@
         </section>
 
         <!-- =====================================================
+             CUSTOMER ONBOARDING PAGE
+        ====================================================== -->
+
+        <section
+            id="customer-onboarding"
+            class="page-section"
+        >
+
+            <div class="section-header">
+
+                <div>
+
+                    <span class="section-label">
+                        KYC WORKFLOW
+                    </span>
+
+                    <h2>
+                        Customer Onboarding
+                    </h2>
+
+                    <p>
+                        Run an initial risk assessment before
+                        proceeding to identity verification.
+                    </p>
+
+                </div>
+
+                <div class="live-status">
+                    <span class="status-dot"></span>
+                    ACTIVE
+                </div>
+
+            </div>
+
+
+            <!-- Risk Check Grid -->
+
+            <div class="risk-check-grid">
+
+
+                <!-- Form Panel -->
+
+                <div class="risk-check-form-panel">
+
+                    <h3>Customer Information</h3>
+
+                    <div class="risk-check-fields">
+
+                        <div class="risk-check-field">
+                            <label for="rcName">Full Name</label>
+                            <input
+                                type="text"
+                                id="rcName"
+                                placeholder="e.g. John Doe"
+                            >
+                        </div>
+
+                        <div class="risk-check-field">
+                            <label for="rcEmail">Email Address</label>
+                            <input
+                                type="email"
+                                id="rcEmail"
+                                placeholder="e.g. john@example.com"
+                            >
+                        </div>
+
+                        <div class="risk-check-field">
+                            <label for="rcPhone">Phone Number</label>
+                            <input
+                                type="tel"
+                                id="rcPhone"
+                                placeholder="e.g. +1 555 000 0000"
+                            >
+                        </div>
+
+                        <div class="risk-check-field">
+                            <label for="rcAmount">Transaction Amount (USD)</label>
+                            <input
+                                type="number"
+                                id="rcAmount"
+                                placeholder="e.g. 500"
+                                min="0"
+                                step="any"
+                            >
+                        </div>
+
+                        <div class="risk-check-field">
+                            <label for="rcCountry">Detected Country</label>
+                            <input
+                                type="text"
+                                id="rcCountry"
+                                placeholder="Detecting..."
+                                readonly
+                            >
+                            <span class="risk-check-detected" id="rcCountryBadge">Auto-detected via IP</span>
+                        </div>
+
+                    </div>
+
+                    <button
+                        type="button"
+                        id="runRiskCheckBtn"
+                        class="risk-check-run-btn"
+                    >
+                        Run Initial Risk Check
+                    </button>
+
+                </div>
+
+
+                <!-- Result Panel -->
+
+                <div class="risk-check-result-panel">
+
+                    <h3>Risk Assessment Result</h3>
+
+                    <div id="riskCheckResult">
+
+                        <div class="risk-check-empty">
+
+                            <div class="risk-check-empty-icon">🔍</div>
+
+                            <strong>No assessment yet</strong>
+
+                            <p>
+                                Fill in the customer details and
+                                click "Run Initial Risk Check".
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
             DOCUMENT VERIFICATION PAGE
         ====================================================== -->
 
@@ -793,10 +976,54 @@
 
 
     <!-- =================================================
+         KYC STEP TRACKER
+    ================================================== -->
+
+    <div class="kyc-stepper" id="kycStepper">
+
+        <!-- Step 1 -->
+        <div class="kyc-step" id="kycStep1">
+            <div class="kyc-step-node">1</div>
+            <div class="kyc-step-label">
+                <strong>Risk Check</strong>
+                <span>Initial assessment</span>
+            </div>
+        </div>
+
+        <div class="kyc-step-connector">
+            <div class="kyc-step-connector-fill" id="kycConnector1"></div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="kyc-step" id="kycStep2">
+            <div class="kyc-step-node">2</div>
+            <div class="kyc-step-label">
+                <strong>Identity Verification</strong>
+                <span>Document &amp; selfie</span>
+            </div>
+        </div>
+
+        <div class="kyc-step-connector">
+            <div class="kyc-step-connector-fill" id="kycConnector2"></div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="kyc-step" id="kycStep3">
+            <div class="kyc-step-node">3</div>
+            <div class="kyc-step-label">
+                <strong>Decision</strong>
+                <span>Approve or decline</span>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
          DOCUMENT VERIFICATION GRID
     ================================================== -->
 
-    <div class="document-verification-grid">
+    <div class="document-verification-grid three-col" id="docVerifyGrid">
 
 
         <!-- =================================================
@@ -897,6 +1124,102 @@
                 disabled
             >
                 Verify Document
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             SELFIE UPLOAD PANEL
+        ================================================== -->
+
+        <div class="analysis-panel selfie-upload-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        LIVENESS CHECK
+                    </span>
+
+                    <h3>
+                        Upload Selfie
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="selfieDropZone"
+                class="document-drop-zone"
+            >
+
+                <div class="document-upload-icon">📷</div>
+
+                <h3>Take or upload a selfie</h3>
+
+                <p>JPG or PNG only</p>
+
+                <span>Maximum size: 5 MB</span>
+
+                <input
+                    type="file"
+                    id="selfieFile"
+                    accept="image/jpeg,image/png,.jpg,.jpeg,.png"
+                    hidden
+                >
+
+                <button
+                    type="button"
+                    id="selfieSelectBtn"
+                    class="secondary-btn"
+                >
+                    Choose Photo
+                </button>
+
+            </div>
+
+
+            <img
+                id="selfiePreviewImg"
+                class="selfie-preview-img"
+                alt="Selfie preview"
+            >
+
+
+            <div
+                id="selectedSelfie"
+                class="selected-document"
+                style="display: none;"
+            >
+                <div>
+                    <strong id="selfieFileName">Photo</strong>
+                    <span id="selfieFileSize">0 KB</span>
+                </div>
+                <button
+                    type="button"
+                    id="removeSelfieBtn"
+                    class="document-remove-btn"
+                >
+                    Remove
+                </button>
+            </div>
+
+
+            <div id="selfieVerificationResult" style="margin-top: 12px;"></div>
+
+
+            <button
+                type="button"
+                id="verifySelfieBtn"
+                class="primary-btn"
+                disabled
+                style="margin-top: 12px;"
+            >
+                Verify Selfie
             </button>
 
         </div>

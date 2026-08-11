@@ -131,11 +131,256 @@ const resultDocumentHash =
     );    
 
 // =========================================================
+// NEW FEATURE DOM REFS
+// =========================================================
+
+// IP risk
+const ipRiskBanner     = document.getElementById("ipRiskBanner");
+const ipRiskBannerText = document.getElementById("ipRiskBannerText");
+const ipRiskBannerDismiss = document.getElementById("ipRiskBannerDismiss");
+const ipRiskBadge      = document.getElementById("ipRiskBadge");
+
+// KYC stepper
+const kycStep1      = document.getElementById("kycStep1");
+const kycStep2      = document.getElementById("kycStep2");
+const kycStep3      = document.getElementById("kycStep3");
+const kycConnector1 = document.getElementById("kycConnector1");
+const kycConnector2 = document.getElementById("kycConnector2");
+
+// Customer onboarding
+const rcName          = document.getElementById("rcName");
+const rcEmail         = document.getElementById("rcEmail");
+const rcPhone         = document.getElementById("rcPhone");
+const rcAmount        = document.getElementById("rcAmount");
+const rcCountry       = document.getElementById("rcCountry");
+const runRiskCheckBtn = document.getElementById("runRiskCheckBtn");
+const riskCheckResult = document.getElementById("riskCheckResult");
+
+// Selfie
+const selfieFile              = document.getElementById("selfieFile");
+const selfieSelectBtn         = document.getElementById("selfieSelectBtn");
+const verifySelfieBtn         = document.getElementById("verifySelfieBtn");
+const removeSelfieBtn         = document.getElementById("removeSelfieBtn");
+const selfieDropZone          = document.getElementById("selfieDropZone");
+const selectedSelfie          = document.getElementById("selectedSelfie");
+const selfieFileName          = document.getElementById("selfieFileName");
+const selfieFileSize          = document.getElementById("selfieFileSize");
+const selfiePreviewImg        = document.getElementById("selfiePreviewImg");
+const selfieVerificationResult = document.getElementById("selfieVerificationResult");
+
+let selectedSelfieFile = null;
+let docVerified  = false;
+let selfieVerified = false;
+
+
+// =========================================================
 // DISABLE BROWSER NATIVE VALIDATION
 // =========================================================
 
 if (transactionForm) {
     transactionForm.noValidate = true;
+}
+
+
+// =========================================================
+// FETCH DASHBOARD DATA
+// =========================================================
+
+
+// =========================================================
+// FEATURE 1 — IP COUNTRY RISK CHECK
+// =========================================================
+
+const HIGH_RISK_COUNTRIES = [
+    "AF", "BY", "MM", "CF", "CD", "CU", "ET", "IR", "IQ",
+    "LY", "ML", "NI", "KP", "RU", "SO", "SS", "SD", "SY",
+    "TN", "UG", "UA", "VE", "YE", "ZW"
+];
+
+let detectedCountryCode = "";
+let detectedCountryName = "Unknown";
+
+async function checkIpRisk() {
+
+    try {
+
+        const res = await fetch(
+            "http://ip-api.com/json/?fields=status,country,countryCode"
+        );
+
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        if (data.status !== "success") return;
+
+        detectedCountryCode = data.countryCode || "";
+        detectedCountryName = data.country    || "Unknown";
+
+        // Auto-fill country field in onboarding form
+        if (rcCountry) {
+            rcCountry.value = detectedCountryName;
+        }
+
+        if (HIGH_RISK_COUNTRIES.includes(detectedCountryCode)) {
+
+            if (ipRiskBanner) {
+                ipRiskBanner.classList.add("visible");
+                if (ipRiskBannerText) {
+                    ipRiskBannerText.textContent =
+                        `Connection from ${detectedCountryName} (${detectedCountryCode}) — flagged jurisdiction.`;
+                }
+            }
+
+            if (ipRiskBadge) {
+                ipRiskBadge.classList.add("visible");
+            }
+
+        }
+
+    } catch {
+        // Silently ignore if IP API is unreachable
+    }
+}
+
+checkIpRisk();
+
+// Dismiss banner
+if (ipRiskBannerDismiss) {
+    ipRiskBannerDismiss.addEventListener("click", () => {
+        if (ipRiskBanner) ipRiskBanner.classList.remove("visible");
+    });
+}
+
+
+// =========================================================
+// FEATURE 3 — KYC STEP TRACKER
+// =========================================================
+
+function setKycStep(step) {
+
+    const steps      = [kycStep1, kycStep2, kycStep3];
+    const connectors = [kycConnector1, kycConnector2];
+
+    steps.forEach((el, i) => {
+        if (!el) return;
+        el.classList.remove("active", "completed");
+        if (i + 1 < step) {
+            el.classList.add("completed");
+        } else if (i + 1 === step) {
+            el.classList.add("active");
+        }
+    });
+
+    connectors.forEach((el, i) => {
+        if (!el) return;
+        el.style.width = (i + 1 < step) ? "100%" : "0%";
+    });
+}
+
+// Start with step 1 active
+setKycStep(1);
+
+
+// =========================================================
+// FEATURE 2 — CUSTOMER ONBOARDING RISK ENGINE
+// =========================================================
+
+const DISPOSABLE_EMAIL_DOMAINS = [
+    "mailinator.com", "guerrillamail.com", "tempmail.com",
+    "throwam.com", "yopmail.com", "sharklasers.com",
+    "trashmail.com", "getnada.com", "fakeinbox.com",
+    "dispostable.com", "maildrop.cc", "spam4.me"
+];
+
+function runInitialRiskCheck() {
+
+    const name   = (rcName   ? rcName.value.trim()   : "");
+    const email  = (rcEmail  ? rcEmail.value.trim()  : "");
+    const phone  = (rcPhone  ? rcPhone.value.trim()  : "");
+    const amount = (rcAmount ? parseFloat(rcAmount.value) : 0);
+
+    const flags   = [];
+    let decision = "pass";
+
+    // Check 1: Name
+    if (name.length < 2) {
+        flags.push({ icon: "⚠️", text: "Full name is missing or too short." });
+        if (decision === "pass") decision = "review";
+    }
+
+    // Check 2: Email
+    if (!email || !email.includes("@")) {
+        flags.push({ icon: "⚠️", text: "Email address is missing or invalid." });
+        decision = "decline";
+    } else {
+        const domain = email.split("@")[1]?.toLowerCase() || "";
+        if (DISPOSABLE_EMAIL_DOMAINS.includes(domain)) {
+            flags.push({ icon: "🚫", text: `Disposable email domain detected: ${domain}` });
+            decision = "decline";
+        }
+    }
+
+    // Check 3: Phone
+    const phoneDigits = phone.replace(/\D/g, "");
+    if (phoneDigits.length < 7) {
+        flags.push({ icon: "⚠️", text: "Phone number is missing or too short." });
+        if (decision === "pass") decision = "review";
+    }
+
+    // Check 4: Amount
+    if (!isNaN(amount) && amount > 10000) {
+        flags.push({ icon: "⚠️", text: `High transaction amount: $${amount.toLocaleString()} exceeds $10,000 threshold.` });
+        if (decision === "pass") decision = "review";
+    }
+
+    // Check 5: High-risk IP country
+    if (HIGH_RISK_COUNTRIES.includes(detectedCountryCode)) {
+        flags.push({ icon: "🚫", text: `Connection from high-risk jurisdiction: ${detectedCountryName} (${detectedCountryCode}).` });
+        decision = "decline";
+    }
+
+    // Render result
+    showRiskCheckResult(decision, flags);
+
+    // Advance KYC stepper if passed
+    if (decision === "pass") {
+        setKycStep(2);
+    }
+}
+
+function showRiskCheckResult(decision, flags) {
+
+    if (!riskCheckResult) return;
+
+    const icons  = { pass: "✓", review: "?", decline: "✕" };
+    const labels = { pass: "PASS", review: "REVIEW", decline: "DECLINE" };
+    const reasons = {
+        pass:    "All checks passed. Proceed to identity verification.",
+        review:  "Some fields require manual review before proceeding.",
+        decline: "Application declined based on risk signals detected."
+    };
+
+    const flagsHtml = flags.length > 0
+        ? `<ul class="decision-card-reasons">${
+            flags.map(f =>
+                `<li><span>${f.icon}</span><span>${f.text}</span></li>`
+            ).join("")
+          }</ul>`
+        : "";
+
+    riskCheckResult.innerHTML = `
+        <div class="decision-card ${decision}">
+            <div class="decision-card-icon">${icons[decision]}</div>
+            <div class="decision-card-label">${labels[decision]}</div>
+            <p class="decision-card-reason">${reasons[decision]}</p>
+            ${flagsHtml}
+        </div>
+    `;
+}
+
+if (runRiskCheckBtn) {
+    runRiskCheckBtn.addEventListener("click", runInitialRiskCheck);
 }
 
 
@@ -1374,32 +1619,136 @@ function handleSelectedDocument(file) {
 
 
     if (documentVerificationResult) {
+    docVerified = false;
+    checkKycCompletion();
+}
 
-        documentVerificationResult.style.display =
-            "flex";
+// ---------------------------------------------------------
+// HANDLE SELECTED SELFIE
+// ---------------------------------------------------------
 
-        documentVerificationResult.innerHTML = `
-            <div class="document-result-icon">
-                ↑
-            </div>
+function handleSelectedSelfie(file) {
+    const allowedTypes = ["image/jpeg", "image/png"];
+    const maxSize = 5 * 1024 * 1024;
 
-            <strong>
-                Document ready
-            </strong>
-
-            <p>
-                Click "Verify Document" to begin.
-            </p>
-        `;
+    if (!allowedTypes.includes(file.type)) {
+        alert("Unsupported selfie type. Please select JPG or PNG.");
+        resetSelfieVerification();
+        return;
     }
 
-
-    if (documentVerificationDetails) {
-
-        documentVerificationDetails.style.display =
-            "none";
+    if (file.size === 0) {
+        alert("The selected selfie is empty.");
+        resetSelfieVerification();
+        return;
     }
 
+    if (file.size > maxSize) {
+        alert("Selfie exceeds the maximum size of 5 MB.");
+        resetSelfieVerification();
+        return;
+    }
+
+    selectedSelfieFile = file;
+
+    if (selfieFileName) {
+        selfieFileName.textContent = file.name;
+    }
+    if (selfieFileSize) {
+        selfieFileSize.textContent = formatDocumentSize(file.size);
+    }
+
+    if (selectedSelfie) {
+        selectedSelfie.style.display = "flex";
+    }
+
+    if (selfiePreviewImg) {
+        selfiePreviewImg.src = URL.createObjectURL(file);
+        selfiePreviewImg.classList.add("visible");
+    }
+
+    if (verifySelfieBtn) {
+        verifySelfieBtn.disabled = false;
+    }
+    
+    selfieVerified = false;
+    checkKycCompletion();
+}
+
+function resetSelfieVerification() {
+    selectedSelfieFile = null;
+    selfieVerified = false;
+    
+    if (selfieFile) selfieFile.value = "";
+    if (selectedSelfie) selectedSelfie.style.display = "none";
+    if (selfiePreviewImg) {
+        selfiePreviewImg.classList.remove("visible");
+        selfiePreviewImg.src = "";
+    }
+    if (verifySelfieBtn) {
+        verifySelfieBtn.disabled = true;
+        verifySelfieBtn.textContent = "Verify Selfie";
+    }
+    if (selfieVerificationResult) {
+        selfieVerificationResult.innerHTML = "";
+    }
+    checkKycCompletion();
+}
+
+
+// ---------------------------------------------------------
+// SELECT SELFIE
+// ---------------------------------------------------------
+
+if (selfieSelectBtn && selfieFile) {
+    selfieSelectBtn.addEventListener("click", () => {
+        selfieFile.click();
+    });
+}
+
+if (selfieFile) {
+    selfieFile.addEventListener("change", (e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            handleSelectedSelfie(e.target.files[0]);
+        }
+    });
+}
+
+if (removeSelfieBtn) {
+    removeSelfieBtn.addEventListener("click", resetSelfieVerification);
+}
+
+// ---------------------------------------------------------
+// SELFIE DRAG AND DROP
+// ---------------------------------------------------------
+
+if (selfieDropZone) {
+    selfieDropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        selfieDropZone.classList.add("drag-over");
+    });
+    selfieDropZone.addEventListener("dragleave", () => {
+        selfieDropZone.classList.remove("drag-over");
+    });
+    selfieDropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        selfieDropZone.classList.remove("drag-over");
+        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            handleSelectedSelfie(e.dataTransfer.files[0]);
+        }
+    });
+}
+
+
+// ---------------------------------------------------------
+// CHECK KYC COMPLETION
+// ---------------------------------------------------------
+
+function checkKycCompletion() {
+    // If both document and selfie are verified, go to step 3
+    if (docVerified && selfieVerified) {
+        setKycStep(3);
+    }
 }
 
 
@@ -1595,6 +1944,9 @@ if (verifyDocumentBtn) {
                 showDocumentVerificationResult(
                     result
                 );
+                
+                docVerified = result.verified === true;
+                checkKycCompletion();
 
 
             } catch (error) {
@@ -1649,6 +2001,65 @@ if (verifyDocumentBtn) {
 
 
 // ---------------------------------------------------------
+// VERIFY SELFIE
+// ---------------------------------------------------------
+
+if (verifySelfieBtn) {
+    verifySelfieBtn.addEventListener("click", async () => {
+        if (!selectedSelfieFile) {
+            alert("Please select a selfie first.");
+            return;
+        }
+
+        verifySelfieBtn.disabled = true;
+        verifySelfieBtn.textContent = "Verifying...";
+        if (selfieVerificationResult) {
+            selfieVerificationResult.innerHTML = `<span class="selfie-status-tag" style="background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.2);">Processing liveness...</span>`;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append("file", selectedSelfieFile);
+
+            // Re-using the /verify-document endpoint for the hackathon prototype
+            const response = await fetch(`${API_URL}/verify-document`, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                const detail = typeof errorData.detail === "string" ? errorData.detail : (errorData.detail?.[0]?.msg || response.statusText);
+                throw new Error(`Verification error: ${detail}`);
+            }
+
+            const result = await response.json();
+            
+            if (result.verified) {
+                if (selfieVerificationResult) {
+                    selfieVerificationResult.innerHTML = `<span class="selfie-status-tag verified">✓ LIVENESS VERIFIED</span>`;
+                }
+                selfieVerified = true;
+                checkKycCompletion();
+            } else {
+                throw new Error("Liveness check failed");
+            }
+
+        } catch (error) {
+            console.error("Selfie verification error:", error);
+            if (selfieVerificationResult) {
+                selfieVerificationResult.innerHTML = `<span class="selfie-status-tag error">✕ ${error.message}</span>`;
+            }
+            selfieVerified = false;
+        } finally {
+            verifySelfieBtn.disabled = false;
+            verifySelfieBtn.textContent = "Verify Selfie";
+        }
+    });
+}
+
+
+// ---------------------------------------------------------
 // SHOW DOCUMENT VERIFICATION RESULT
 // ---------------------------------------------------------
 
@@ -1667,6 +2078,8 @@ function showDocumentVerificationResult(
     const score =
         Number(result.score ?? 0);
 
+    const isApproved = result.verified === true;
+
 
     if (documentEngineStatus) {
         documentEngineStatus.textContent = status;
@@ -1680,6 +2093,28 @@ function showDocumentVerificationResult(
 
     if (documentVerificationDetails) {
         documentVerificationDetails.style.display = "block";
+        
+        // Find or create the decision card container
+        let decisionContainer = document.getElementById("docDecisionContainer");
+        if (!decisionContainer) {
+            decisionContainer = document.createElement("div");
+            decisionContainer.id = "docDecisionContainer";
+            // Insert it at the top of documentVerificationDetails
+            documentVerificationDetails.insertBefore(decisionContainer, documentVerificationDetails.firstChild);
+        }
+        
+        const decisionClass = isApproved ? "approved" : "declined";
+        const decisionIcon  = isApproved ? "✓" : "✕";
+        const decisionLabel = isApproved ? "APPROVED" : "DECLINED";
+        const decisionSub   = isApproved ? "Document authenticity verified" : "Failed authenticity checks";
+        
+        decisionContainer.innerHTML = `
+            <div class="doc-decision-card ${decisionClass}">
+                <div class="doc-decision-icon">${decisionIcon}</div>
+                <div class="doc-decision-label">${decisionLabel}</div>
+                <p class="doc-decision-sub">${decisionSub}</p>
+            </div>
+        `;
     }
 
 
