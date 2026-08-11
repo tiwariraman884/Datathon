@@ -1,192 +1,143 @@
-# IBM Z Fraud Detection
+# 🛡️ CardSentinel — IBM Z Fraud Detection
 
-An AI-powered credit card fraud detection system designed to analyze transaction data, identify potentially fraudulent transactions, and present the results through an interactive fraud detection dashboard.
+<div align="center">
 
-The project combines a **Random Forest machine learning model**, **FastAPI backend**, transaction simulation, and a responsive web-based dashboard to demonstrate a real-time fraud detection workflow.
+**An AI-powered credit card fraud detection system with a real-time interactive dashboard.**
+
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python)](https://python.org)
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.100%2B-green?style=for-the-badge&logo=fastapi)](https://fastapi.tiangolo.com)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-RandomForest-orange?style=for-the-badge&logo=scikit-learn)](https://scikit-learn.org)
+[![License](https://img.shields.io/badge/License-Educational-purple?style=for-the-badge)](LICENSE)
+
+</div>
+
+---
+
+## 📖 Overview
+
+**CardSentinel** is an end-to-end credit card fraud detection prototype built for the **IBM Z Datathon**. It combines a trained **Random Forest machine learning model**, a **FastAPI backend**, a **document verification engine**, transaction simulation, and a fully responsive **fraud detection dashboard** to demonstrate a real-time fraud analysis workflow.
 
 ---
 
 ## 🚀 Key Features
 
 ### 🤖 Machine Learning Fraud Detection
+- **Random Forest Classifier** trained on real-world credit card transaction data
+- Binary classification: **FRAUD** or **LEGITIMATE**
+- Custom fraud probability **threshold** (0.35) tuned for precision-recall balance
+- **PR-AUC: 0.801**
+- Risk-level scoring: **HIGH / MEDIUM / LOW**
 
-* Random Forest classification model.
-* Classifies transactions as:
-
-  * **Fraud**
-  * **Legitimate**
-* Provides fraud detection results through the backend prediction API.
-* Uses transaction features from the credit card fraud dataset.
-
-### ⚡ FastAPI Backend
-
-* REST API built with FastAPI.
-* Provides the `/predict` endpoint for transaction prediction.
-* Receives transaction features and returns the model prediction.
-* Designed to support real-time transaction analysis.
+### ⚡ FastAPI Backend — *CardSentinel API v1.0.0*
+- Full REST API with CORS support
+- `/predict` endpoint for real-time transaction inference
+- `/verify-document` endpoint for document integrity verification (PDF, JPG, PNG)
+- `/stats`, `/history`, `/transactions`, `/dashboard` for live monitoring data
+- `/sample-transaction` and `/sample-fraud-transaction` for testing
 
 ### 📊 Interactive Fraud Detection Dashboard
+A responsive single-page dashboard with multiple monitoring sections:
 
-The frontend provides a centralized dashboard for monitoring fraud detection activity.
-
-It includes:
-
-* Total transactions
-* Fraud detected
-* Risk overview
-* Transaction monitoring
-* Risk analysis
-* Model information
-* System status
-* Fraud alerts
-* Transaction analyzer
-
-### 🔍 Transaction Analyzer
-
-Users can enter transaction feature values and submit them to the fraud detection system.
-
-The system processes the transaction through the Random Forest model and displays the resulting classification.
+| Section | Description |
+|---------|-------------|
+| **Dashboard** | High-level KPIs — total transactions, fraud count, fraud rate |
+| **Transactions** | Live transaction feed with prediction results |
+| **Risk Analysis** | Risk distribution charts and fraud activity breakdown |
+| **System** | Model info, API health, and system status |
+| **Transaction Analyzer** | Manual transaction feature input → live prediction |
+| **Document Verifier** | Upload and verify supporting documents (PDF/JPG/PNG) |
 
 ### 🔄 Transaction Simulator
+Streams historical transaction records to the backend to simulate live traffic and demonstrate real-time fraud prediction.
 
-The simulator can stream historical transaction records to the backend to simulate incoming transaction traffic.
-
-It can be used to demonstrate:
-
-* Transaction processing
-* Fraud predictions
-* Risk assessment
-* Detection statistics
+### 📁 Document Verification
+Upload transaction-supporting documents for basic integrity checks:
+- File type validation (PDF, JPG, PNG only)
+- File size validation (max 5 MB)
+- SHA-256 hash generation for document fingerprinting
 
 ### 📈 Data Exploration
-
-The project includes notebooks for exploring and analyzing the credit card transaction dataset.
-
-These notebooks can be used for:
-
-* Exploratory Data Analysis (EDA)
-* Data visualization
-* Understanding transaction patterns
-* Studying fraudulent transaction distributions
+Jupyter notebooks for EDA, visualization, and understanding the dataset's fraud distribution patterns.
 
 ---
 
 # 🏗️ System Architecture
 
-The overall workflow is:
-
 ```text
-Credit Card Transaction
-          │
-          ▼
-   Transaction Input
-          │
-          ▼
-   FastAPI Backend
-          │
-       /predict
-          │
-          ▼
-   Random Forest Model
-          │
-          ▼
- Fraud / Legitimate
-          │
-          ▼
-   Dashboard / Result
+                    ┌──────────────────────────────────┐
+                    │       CardSentinel Frontend        │
+                    │   (HTML + CSS + JavaScript SPA)    │
+                    └──────────┬───────────────┬─────────┘
+                               │               │
+                    ┌──────────▼──────────┐  ┌─▼─────────────────────┐
+                    │  Transaction Input  │  │   Document Upload      │
+                    └──────────┬──────────┘  └─┬─────────────────────┘
+                               │               │
+                    ┌──────────▼───────────────▼──────────┐
+                    │     FastAPI Backend (app.py)         │
+                    │  CardSentinel Fraud Detection API    │
+                    ├──────────────────────────────────────┤
+                    │  POST /predict   POST /verify-document│
+                    │  GET  /stats     GET  /dashboard      │
+                    │  GET  /history   GET  /transactions   │
+                    └──────────────────┬──────────────────┘
+                                       │
+                    ┌──────────────────▼──────────────────┐
+                    │       Random Forest Model            │
+                    │   (fraud_model.pkl — 30 features)    │
+                    └──────────────────────────────────────┘
 ```
 
 For simulated real-time processing:
 
 ```text
-Historical Dataset
-        │
-        ▼
-Transaction Simulator
-        │
-        ▼
-FastAPI /predict
-        │
-        ▼
-Random Forest Model
-        │
-        ▼
-Prediction + Risk Information
-        │
-        ▼
-Detection Statistics
+creditcard.csv  →  simulator.py  →  POST /predict  →  Model  →  Dashboard
 ```
 
 ---
 
 # 🛠️ Technology Stack
 
-## Machine Learning
-
-* Python
-* Pandas
-* NumPy
-* Scikit-learn
-* Random Forest
-
-## Backend
-
-* FastAPI
-* Uvicorn
-* Python
-
-## Frontend
-
-* HTML
-* CSS
-* JavaScript
-* Responsive dashboard UI
-
-## Data & Analysis
-
-* Credit card transaction dataset
-* Jupyter Notebook
-* Matplotlib
-* Exploratory Data Analysis
-
-## Development & Version Control
-
-* Git
-* GitHub
-* Git LFS
+| Layer | Technologies |
+|-------|-------------|
+| **ML / Data** | Python, Pandas, NumPy, Scikit-learn, Random Forest, Matplotlib |
+| **Backend** | FastAPI, Uvicorn, Pydantic, Joblib, python-multipart |
+| **Frontend** | HTML5, Vanilla CSS, JavaScript (ES6+) |
+| **Dev & VCS** | Git, GitHub, Git LFS |
 
 ---
 
 # 📁 Project Structure
 
 ```text
-IBM-Z-FRAUD-DETECTION
+IBM-Z-FRAUD-DETECTION/
 │
 ├── backend/
-│   ├── app.py              # FastAPI application
-│   └── simulator.py        # Transaction simulator (sends to /predict)
+│   ├── app.py                  # FastAPI application (CardSentinel API)
+│   └── simulator.py            # Sends batch transactions to /predict
 │
 ├── data/
-│   ├── creditcard.csv      # Full dataset (Git LFS tracked)
-│   └── creditcard_tmp.csv  # Temporary transaction sample
+│   ├── creditcard.csv          # Full dataset — Git LFS tracked
+│   └── creditcard_tmp.csv      # Temporary transaction sample
 │
 ├── models/
-│   └── fraud_model.pkl     # Trained Random Forest model
+│   └── fraud_model.pkl         # Trained Random Forest model package
 │
 ├── notebooks/
-│   └── 01_exploration.ipynb
+│   └── 01_exploration.ipynb    # Exploratory Data Analysis notebook
 │
 ├── frontend/
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
+│   ├── index.html              # Single-page dashboard application
+│   ├── style.css               # Dashboard styles
+│   ├── app.js                  # Dashboard logic & API calls
+│   └── assets/
+│       └── logo.jpg            # CardSentinel logo
 │
-├── simulator.py            # Streaming transaction generator
+├── simulator.py                # Streaming transaction generator
 ├── README.md
-└── ...
+├── .gitignore
+└── .gitattributes              # Git LFS configuration
 ```
-
-> The exact contents of `models/`, `notebooks/`, and other project directories may vary depending on the final repository version.
 
 ---
 
@@ -243,53 +194,25 @@ The trained model receives transaction features and produces the corresponding f
 
 ---
 
-# 🔌 API
+# 🔌 API Reference
 
-The FastAPI backend exposes a REST API with the following endpoints:
+Base URL: `http://127.0.0.1:8000`
 
 | Method | Endpoint | Description |
 |--------|----------|-------------|
-| `GET` | `/` | Health check — verifies the API is running |
-| `POST` | `/predict` | Predicts fraud/legitimate for a transaction |
-| `GET` | `/stats` | Returns live monitoring statistics |
-| `GET` | `/history` | Returns the transaction history |
-| `GET` | `/transactions` | Returns recent transactions (latest first) |
-| `GET` | `/dashboard` | Returns compiled dashboard data |
-| `GET` | `/sample-transaction` | Returns a random sample transaction |
-| `GET` | `/sample-fraud-transaction` | Returns a real fraudulent transaction |
+| `GET` | `/` | Health check — API status |
+| `POST` | `/predict` | Predict fraud/legitimate for a transaction |
+| `POST` | `/verify-document` | Verify uploaded document (PDF/JPG/PNG) |
+| `GET` | `/stats` | Live fraud detection statistics |
+| `GET` | `/history` | Full transaction prediction history |
+| `GET` | `/transactions` | Recent transactions (latest first) |
+| `GET` | `/dashboard` | Compiled dashboard data (overview + risk) |
+| `GET` | `/sample-transaction` | Random sample transaction from dataset |
+| `GET` | `/sample-fraud-transaction` | Real fraudulent transaction from dataset |
 
-## Prediction Endpoint
+### `POST /predict` — Transaction Prediction
 
-### `POST /predict`
-
-The `/predict` endpoint receives transaction information and returns the model's prediction.
-
-### Purpose
-
-The endpoint is responsible for:
-
-1. Receiving transaction features.
-2. Processing the input.
-3. Passing the transaction to the Random Forest model.
-4. Generating a fraud/legitimate prediction.
-5. Returning the prediction to the client.
-
-### Prediction Output
-
-The primary classification produced by the model is:
-
-```text
-Fraud
-```
-
-or
-
-```text
-Legitimate
-```
-
-### Example Request
-
+**Request body:**
 ```json
 {
   "Time": 5123.0,
@@ -301,14 +224,35 @@ Legitimate
 }
 ```
 
-### Example Response
-
+**Response:**
 ```json
 {
+  "transaction_id": 42,
   "fraud_probability": 0.87,
   "prediction": "FRAUD",
   "risk_level": "HIGH",
   "threshold": 0.35
+}
+```
+
+### `POST /verify-document` — Document Verification
+
+**Request:** `multipart/form-data` with a `file` field (PDF, JPG, or PNG — max 5 MB)
+
+**Response:**
+```json
+{
+  "verified": true,
+  "status": "VERIFIED",
+  "score": 100,
+  "message": "Document passed basic validation.",
+  "file": {
+    "name": "statement.pdf",
+    "type": "application/pdf",
+    "size": 204800,
+    "size_formatted": "200.0 KB",
+    "sha256": "a3f5c..."
+  }
 }
 ```
 
@@ -352,44 +296,43 @@ source .venv/bin/activate
 ## 4. Install Dependencies
 
 ```bash
-pip install pandas numpy scikit-learn matplotlib requests fastapi uvicorn joblib
+pip install pandas numpy scikit-learn matplotlib requests fastapi uvicorn joblib python-multipart
 ```
 
 ---
 
 # ▶️ Running the Application
 
-## Start the FastAPI Backend
-
-From the project root:
+## Step 1 — Start the FastAPI Backend
 
 ```bash
 python -m uvicorn backend.app:app --reload
 ```
 
-The backend will be available at:
+| URL | Description |
+|-----|-------------|
+| `http://127.0.0.1:8000/` | API health check |
+| `http://127.0.0.1:8000/docs` | Interactive Swagger UI |
+| `http://127.0.0.1:8000/redoc` | ReDoc API documentation |
 
-```text
-http://127.0.0.1:8000/
+## Step 2 — Open the Frontend Dashboard
+
+Open `frontend/index.html` directly in a browser, or serve it with a local HTTP server:
+
+```bash
+# Python built-in server
+python -m http.server 5500 --directory frontend
 ```
 
-FastAPI's interactive API documentation can normally be accessed at:
+Then visit: `http://localhost:5500`
 
-```text
-http://127.0.0.1:8000/docs
-```
-
-## Run the Transaction Simulator
-
-Open another terminal and run:
+## Step 3 (Optional) — Run the Transaction Simulator
 
 ```bash
 python backend/simulator.py
 ```
 
-The simulator sends transaction records to the backend and can display prediction and detection statistics.
-
-The project also includes a streaming transaction generator (`simulator.py` at the project root) that cycles through the full dataset indefinitely:
+Or use the streaming generator from the project root:
 
 ```python
 from simulator import stream_transactions
@@ -402,36 +345,16 @@ for tx in stream_transactions(rate=1.0):
 
 # 🖥️ Using the Dashboard
 
-After starting the required backend services, open the frontend application.
+After starting the backend, open `frontend/index.html` in your browser.
 
-The dashboard provides several sections for monitoring the fraud detection system.
-
-### Dashboard
-
-Provides a high-level overview of:
-
-* Total transactions
-* Fraudulent transactions
-* Risk levels
-* Detection activity
-* Model information
-* System status
-
-### Transactions
-
-Provides transaction-level information and prediction results.
-
-### Risk Analysis
-
-Provides a more detailed view of transaction risk and model-related information.
-
-### System
-
-Provides information about the fraud detection engine and system status.
-
-### Transaction Analyzer
-
-Allows a user to provide transaction feature values and request a fraud prediction.
+| Section | What You'll See |
+|---------|----------------|
+| **Dashboard** | Total transactions, fraud count, fraud rate, recent alerts |
+| **Transactions** | Live transaction table with ID, amount, prediction, risk |
+| **Risk Analysis** | Risk distribution (HIGH / MEDIUM / LOW) with live counters |
+| **System** | Model type, features, threshold, and API health |
+| **Transaction Analyzer** | Fill in 30 features → get instant fraud prediction |
+| **Document Verifier** | Upload PDF/JPG/PNG → get verification result and SHA-256 hash |
 
 ---
 
@@ -532,10 +455,10 @@ Fraud Detection System
 
 This project was developed as part of the **IBM Z Datathon** challenge.
 
-The project demonstrates the use of machine learning, backend APIs, transaction processing, and data visualization to address the problem of credit card fraud detection.
+It demonstrates the use of machine learning, backend APIs, transaction processing, document verification, and data visualization to address the real-world problem of credit card fraud detection.
 
 ---
 
 # 📄 License
 
-This project is intended for educational, demonstration, and hackathon purposes.
+This project is intended for **educational, demonstration, and hackathon purposes**.
