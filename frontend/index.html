@@ -20,16 +20,11 @@
     <aside class="sidebar">
 
         <div class="brand">
-
-            <div class="brand-icon">
-                CC
-            </div>
-
+            <img src="assets/logo.jpg" alt="CardSentinel Logo" class="brand-logo">
             <div>
-                <h2>CraditCard</h2>
-                <span>Fraud Intelligence</span>
+                <h2>CardSentinel</h2>
+                <span>AI-Powered Fraud Intelligence</span>
             </div>
-
         </div>
 
 
@@ -41,8 +36,34 @@
                 href="#dashboard"
                 class="nav-item active"
             >
-                <span>▦</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 <span>Dashboard</span>
+            </a>
+
+            
+            <a
+                href="#document-verification"
+                class="nav-item"
+>
+                <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="nav-icon"
+    >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="8" y1="13" x2="16" y2="13"></line>
+                    <line x1="8" y1="17" x2="16" y2="17"></line>
+                    <line x1="8" y1="9" x2="10" y2="9"></line>
+                </svg>
+
+                <span>Document Verification</span>
             </a>
 
 
@@ -50,16 +71,15 @@
                 href="#transactions"
                 class="nav-item"
             >
-                <span>↔</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><polyline points="16 3 21 8 16 13"></polyline><line x1="21" y1="8" x2="9" y2="8"></line><polyline points="8 21 3 16 8 11"></polyline><line x1="3" y1="16" x2="15" y2="16"></line></svg>
                 <span>Transactions</span>
             </a>
-
 
             <a
                 href="#risk-analysis"
                 class="nav-item"
             >
-                <span>◈</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
                 <span>Risk Analysis</span>
             </a>
 
@@ -68,7 +88,7 @@
                 href="#system"
                 class="nav-item"
             >
-                <span>⚙</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 <span>System</span>
             </a>
 
@@ -104,7 +124,7 @@
 
         <section
             id="dashboard"
-            class="page-section active"
+            class="page-section"
         >
 
             <!-- Dashboard Header -->
@@ -733,6 +753,327 @@
 
         </section>
 
+        <!-- =====================================================
+            DOCUMENT VERIFICATION PAGE
+        ====================================================== -->
+
+<section
+    id="document-verification"
+    class="page-section"
+>
+
+    <div class="section-header">
+
+        <div>
+
+            <span class="section-label">
+                IDENTITY SECURITY
+            </span>
+
+            <h2>
+                Document Verification
+            </h2>
+
+            <p>
+                Upload an identity document for basic
+                security and validation checks.
+            </p>
+
+        </div>
+
+        <div class="live-status">
+
+            <span class="status-dot"></span>
+
+            SECURE
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         DOCUMENT VERIFICATION GRID
+    ================================================== -->
+
+    <div class="document-verification-grid">
+
+
+        <!-- =================================================
+             UPLOAD PANEL
+        ================================================== -->
+
+        <div class="analysis-panel document-upload-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        DOCUMENT INPUT
+                    </span>
+
+                    <h3>
+                        Upload Document
+                    </h3>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="documentDropZone"
+                class="document-drop-zone"
+            >
+
+                <div class="document-upload-icon">
+                    ↑
+                </div>
+
+                <h3>
+                    Select identity document
+                </h3>
+
+                <p>
+                    PDF, JPG or PNG
+                </p>
+
+                <span>
+                    Maximum size: 5 MB
+                </span>
+
+                <input
+                    type="file"
+                    id="documentFile"
+                    accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+                    hidden
+                >
+
+                <button
+                    type="button"
+                    id="documentSelectBtn"
+                    class="secondary-btn"
+                >
+                    Choose Document
+                </button>
+
+            </div>
+
+
+            <div
+                id="selectedDocument"
+                class="selected-document"
+                style="display: none;"
+            >
+
+                <div>
+
+                    <strong id="documentFileName">
+                        Document
+                    </strong>
+
+                    <span id="documentFileSize">
+                        0 KB
+                    </span>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="removeDocumentBtn"
+                    class="document-remove-btn"
+                >
+                    Remove
+                </button>
+
+            </div>
+
+
+            <button
+                type="button"
+                id="verifyDocumentBtn"
+                class="primary-btn"
+                disabled
+            >
+                Verify Document
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             VERIFICATION RESULT
+        ================================================== -->
+
+        <div class="analysis-panel document-result-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="section-label">
+                        VERIFICATION ENGINE
+                    </span>
+
+                    <h3>
+                        Verification Result
+                    </h3>
+
+                </div>
+
+                <span
+                    id="documentEngineStatus"
+                    class="engine-status"
+                >
+                    READY
+                </span>
+
+            </div>
+
+
+            <div
+                id="documentVerificationResult"
+                class="document-result-empty"
+            >
+
+                <div class="document-result-icon">
+                    ✓
+                </div>
+
+                <strong>
+                    No document analyzed
+                </strong>
+
+                <p>
+                    Upload a document to begin verification.
+                </p>
+
+            </div>
+
+
+            <div
+                id="documentVerificationDetails"
+                class="document-verification-details"
+                style="display: none;"
+            >
+
+                <div class="document-status-display">
+
+                    <span
+                        id="documentStatusBadge"
+                        class="document-status-badge"
+                    >
+                        VERIFIED
+                    </span>
+
+                    <strong id="documentScore">
+                        100%
+                    </strong>
+
+                </div>
+
+
+                <p id="documentVerificationMessage">
+                    Document passed validation.
+                </p>
+
+
+                <div class="model-details">
+
+                    <div class="model-detail">
+
+                        <span>
+                            File
+                        </span>
+
+                        <strong id="resultFileName">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="model-detail">
+
+                        <span>
+                            Type
+                        </span>
+
+                        <strong id="resultDocumentType">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="model-detail">
+
+                        <span>
+                            Size
+                        </span>
+
+                        <strong id="resultDocumentSize">
+                            -
+                        </strong>
+
+                    </div>
+
+
+                    <div class="model-detail">
+
+                        <span>
+                            SHA-256
+                        </span>
+
+                        <strong
+                            id="resultDocumentHash"
+                            class="hash-value"
+                        >
+                            -
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         SECURITY NOTICE
+    ================================================== -->
+
+    <div class="document-security-notice">
+
+        <div class="fraud-alert-icon">
+            !
+        </div>
+
+        <div>
+
+            <strong>
+                Verification scope
+            </strong>
+
+            <p>
+                CardSentinel currently performs basic document
+                validation and file integrity checks. It does
+                not independently verify government records,
+                document ownership, or official identity databases.
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
 
         <!-- =====================================================
              RISK ANALYSIS PAGE
@@ -772,7 +1113,6 @@
                 </div>
 
             </div>
-
 
             <!-- =================================================
                  RISK SUMMARY
@@ -1100,6 +1440,7 @@
             </div>
 
         </section>
+
 
 
         <!-- =====================================================

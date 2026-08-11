@@ -53,6 +53,84 @@ const fraudSampleBtn =
     document.getElementById("fraudSampleBtn");
 
 // =========================================================
+// DOCUMENT VERIFICATION ELEMENTS
+// =========================================================
+
+const documentFile =
+    document.getElementById("documentFile");
+
+const documentSelectBtn =
+    document.getElementById("documentSelectBtn");
+
+const verifyDocumentBtn =
+    document.getElementById("verifyDocumentBtn");
+
+const removeDocumentBtn =
+    document.getElementById("removeDocumentBtn");
+
+const documentDropZone =
+    document.getElementById("documentDropZone");
+
+const selectedDocument =
+    document.getElementById("selectedDocument");
+
+const documentFileName =
+    document.getElementById("documentFileName");
+
+const documentFileSize =
+    document.getElementById("documentFileSize");
+
+const documentVerificationResult =
+    document.getElementById(
+        "documentVerificationResult"
+    );
+
+const documentVerificationDetails =
+    document.getElementById(
+        "documentVerificationDetails"
+    );
+
+const documentEngineStatus =
+    document.getElementById(
+        "documentEngineStatus"
+    );
+
+const documentStatusBadge =
+    document.getElementById(
+        "documentStatusBadge"
+    );
+
+const documentScore =
+    document.getElementById(
+        "documentScore"
+    );
+
+const documentVerificationMessage =
+    document.getElementById(
+        "documentVerificationMessage"
+    );
+
+const resultFileName =
+    document.getElementById(
+        "resultFileName"
+    );
+
+const resultDocumentType =
+    document.getElementById(
+        "resultDocumentType"
+    );
+
+const resultDocumentSize =
+    document.getElementById(
+        "resultDocumentSize"
+    );
+
+const resultDocumentHash =
+    document.getElementById(
+        "resultDocumentHash"
+    );    
+
+// =========================================================
 // DISABLE BROWSER NATIVE VALIDATION
 // =========================================================
 
@@ -1083,3 +1161,566 @@ const initialPage =
     window.location.hash.substring(1) || "dashboard";
 
 showPage(initialPage);
+
+// =========================================================
+// DOCUMENT VERIFICATION
+// =========================================================
+
+let selectedDocumentFile = null;
+
+
+// ---------------------------------------------------------
+// FORMAT FILE SIZE
+// ---------------------------------------------------------
+
+function formatDocumentSize(bytes) {
+
+    if (!bytes) {
+        return "0 KB";
+    }
+
+    if (bytes < 1024 * 1024) {
+
+        return `${(
+            bytes / 1024
+        ).toFixed(1)} KB`;
+
+    }
+
+    return `${(
+        bytes / (1024 * 1024)
+    ).toFixed(2)} MB`;
+}
+
+
+// ---------------------------------------------------------
+// RESET DOCUMENT RESULT
+// ---------------------------------------------------------
+
+function resetDocumentVerification() {
+
+    selectedDocumentFile = null;
+
+    if (documentFile) {
+        documentFile.value = "";
+    }
+
+    if (selectedDocument) {
+        selectedDocument.style.display = "none";
+    }
+
+    if (verifyDocumentBtn) {
+        verifyDocumentBtn.disabled = true;
+        verifyDocumentBtn.textContent =
+            "Verify Document";
+    }
+
+    if (documentEngineStatus) {
+        documentEngineStatus.textContent =
+            "READY";
+    }
+
+    if (documentVerificationResult) {
+
+        documentVerificationResult.style.display =
+            "flex";
+
+        documentVerificationResult.innerHTML = `
+            <div class="document-result-icon">
+                ✓
+            </div>
+
+            <strong>
+                No document analyzed
+            </strong>
+
+            <p>
+                Upload a document to begin verification.
+            </p>
+        `;
+    }
+
+    if (documentVerificationDetails) {
+        documentVerificationDetails.style.display =
+            "none";
+    }
+}
+
+
+// ---------------------------------------------------------
+// SELECT DOCUMENT
+// ---------------------------------------------------------
+
+if (documentSelectBtn && documentFile) {
+
+    documentSelectBtn.addEventListener(
+        "click",
+        () => {
+
+            documentFile.click();
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// FILE SELECTED
+// ---------------------------------------------------------
+
+if (documentFile) {
+
+    documentFile.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                documentFile.files?.[0];
+
+            if (!file) {
+                resetDocumentVerification();
+                return;
+            }
+
+            handleSelectedDocument(file);
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// HANDLE SELECTED DOCUMENT
+// ---------------------------------------------------------
+
+function handleSelectedDocument(file) {
+
+    const allowedTypes = [
+        "application/pdf",
+        "image/jpeg",
+        "image/png"
+    ];
+
+    const maxSize =
+        5 * 1024 * 1024;
+
+    if (!allowedTypes.includes(file.type)) {
+
+        alert(
+            "Unsupported document type. Please select PDF, JPG or PNG."
+        );
+
+        resetDocumentVerification();
+
+        return;
+    }
+
+
+    if (file.size === 0) {
+
+        alert(
+            "The selected document is empty."
+        );
+
+        resetDocumentVerification();
+
+        return;
+    }
+
+
+    if (file.size > maxSize) {
+
+        alert(
+            "Document size must not exceed 5 MB."
+        );
+
+        resetDocumentVerification();
+
+        return;
+    }
+
+
+    selectedDocumentFile = file;
+
+
+    if (selectedDocument) {
+
+        selectedDocument.style.display =
+            "flex";
+    }
+
+
+    if (documentFileName) {
+
+        documentFileName.textContent =
+            file.name;
+    }
+
+
+    if (documentFileSize) {
+
+        documentFileSize.textContent =
+            formatDocumentSize(file.size);
+    }
+
+
+    if (verifyDocumentBtn) {
+
+        verifyDocumentBtn.disabled =
+            false;
+    }
+
+
+    if (documentVerificationResult) {
+
+        documentVerificationResult.style.display =
+            "flex";
+
+        documentVerificationResult.innerHTML = `
+            <div class="document-result-icon">
+                ↑
+            </div>
+
+            <strong>
+                Document ready
+            </strong>
+
+            <p>
+                Click "Verify Document" to begin.
+            </p>
+        `;
+    }
+
+
+    if (documentVerificationDetails) {
+
+        documentVerificationDetails.style.display =
+            "none";
+    }
+
+}
+
+
+// ---------------------------------------------------------
+// REMOVE DOCUMENT
+// ---------------------------------------------------------
+
+if (removeDocumentBtn) {
+
+    removeDocumentBtn.addEventListener(
+        "click",
+        () => {
+
+            resetDocumentVerification();
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// DRAG & DROP
+// ---------------------------------------------------------
+
+if (documentDropZone) {
+
+    documentDropZone.addEventListener(
+        "dragover",
+        (event) => {
+
+            event.preventDefault();
+
+            documentDropZone.classList.add(
+                "drag-over"
+            );
+
+        }
+    );
+
+
+    documentDropZone.addEventListener(
+        "dragleave",
+        () => {
+
+            documentDropZone.classList.remove(
+                "drag-over"
+            );
+
+        }
+    );
+
+
+    documentDropZone.addEventListener(
+        "drop",
+        (event) => {
+
+            event.preventDefault();
+
+            documentDropZone.classList.remove(
+                "drag-over"
+            );
+
+            const file =
+                event.dataTransfer.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+            handleSelectedDocument(file);
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// VERIFY DOCUMENT
+// ---------------------------------------------------------
+
+if (verifyDocumentBtn) {
+
+    verifyDocumentBtn.addEventListener(
+        "click",
+        async () => {
+
+            if (!selectedDocumentFile) {
+
+                alert(
+                    "Please select a document first."
+                );
+
+                return;
+            }
+
+
+            verifyDocumentBtn.disabled =
+                true;
+
+            verifyDocumentBtn.textContent =
+                "Verifying...";
+
+
+            if (documentEngineStatus) {
+
+                documentEngineStatus.textContent =
+                    "PROCESSING";
+            }
+
+
+            if (documentVerificationResult) {
+
+                documentVerificationResult.style.display =
+                    "flex";
+
+                documentVerificationResult.innerHTML = `
+                    <div class="document-result-icon">
+                        ...
+                    </div>
+
+                    <strong>
+                        Analyzing document
+                    </strong>
+
+                    <p>
+                        Running CardSentinel validation checks...
+                    </p>
+                `;
+            }
+
+
+            try {
+
+                const formData =
+                    new FormData();
+
+                formData.append(
+                    "file",
+                    selectedDocumentFile
+                );
+
+
+                const response =
+                    await fetch(
+                        `${API_URL}/verify-document`,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    let message =
+                        `Verification API error: ${response.status}`;
+
+                    try {
+
+                        const errorData =
+                            await response.json();
+
+                        if (errorData.detail) {
+
+                            message =
+                                typeof errorData.detail === "string"
+                                    ? errorData.detail
+                                    : JSON.stringify(
+                                        errorData.detail
+                                    );
+                        }
+
+                    } catch {
+                        // Ignore parsing failure
+                    }
+
+                    throw new Error(message);
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                console.log(
+                    "Document verification result:",
+                    result
+                );
+
+
+                showDocumentVerificationResult(
+                    result
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Document verification error:",
+                    error
+                );
+
+
+                if (documentEngineStatus) {
+
+                    documentEngineStatus.textContent =
+                        "ERROR";
+                }
+
+
+                if (documentVerificationResult) {
+
+                    documentVerificationResult.style.display =
+                        "flex";
+
+                    documentVerificationResult.innerHTML = `
+                        <div class="document-result-icon">
+                            !
+                        </div>
+
+                        <strong>
+                            Verification failed
+                        </strong>
+
+                        <p>
+                            ${error.message}
+                        </p>
+                    `;
+                }
+
+            } finally {
+
+                verifyDocumentBtn.disabled =
+                    false;
+
+                verifyDocumentBtn.textContent =
+                    "Verify Document";
+
+            }
+
+        }
+    );
+
+}
+
+
+// ---------------------------------------------------------
+// SHOW DOCUMENT VERIFICATION RESULT
+// ---------------------------------------------------------
+
+function showDocumentVerificationResult(
+    result
+) {
+    // Backend returns: { verified, status, score, message, file: { name, type, size, size_formatted, sha256 } }
+
+    const fileInfo = result.file || {};
+
+    const status =
+        String(
+            result.status || "REVIEW"
+        ).toUpperCase();
+
+    const score =
+        Number(result.score ?? 0);
+
+
+    if (documentEngineStatus) {
+        documentEngineStatus.textContent = status;
+    }
+
+
+    if (documentVerificationResult) {
+        documentVerificationResult.style.display = "none";
+    }
+
+
+    if (documentVerificationDetails) {
+        documentVerificationDetails.style.display = "block";
+    }
+
+
+    if (documentStatusBadge) {
+        documentStatusBadge.textContent = status;
+        documentStatusBadge.className =
+            `document-status-badge ${status.toLowerCase()}`;
+    }
+
+
+    if (documentScore) {
+        documentScore.textContent = `${score}%`;
+    }
+
+
+    if (documentVerificationMessage) {
+        documentVerificationMessage.textContent =
+            result.message || "Document verification completed.";
+    }
+
+
+    if (resultFileName) {
+        resultFileName.textContent = fileInfo.name || "-";
+    }
+
+
+    if (resultDocumentType) {
+        resultDocumentType.textContent = fileInfo.type || "-";
+    }
+
+
+    if (resultDocumentSize) {
+        resultDocumentSize.textContent =
+            fileInfo.size_formatted ||
+            formatDocumentSize(Number(fileInfo.size ?? 0));
+    }
+
+
+    if (resultDocumentHash) {
+        resultDocumentHash.textContent = fileInfo.sha256 || "-";
+        resultDocumentHash.title = fileInfo.sha256 || "";
+    }
+
+}
