@@ -293,59 +293,60 @@ const DISPOSABLE_EMAIL_DOMAINS = [
     "dispostable.com", "maildrop.cc", "spam4.me"
 ];
 
-function runInitialRiskCheck() {
+async function runInitialRiskCheck() {
 
     const name   = (rcName   ? rcName.value.trim()   : "");
     const email  = (rcEmail  ? rcEmail.value.trim()  : "");
     const phone  = (rcPhone  ? rcPhone.value.trim()  : "");
     const amount = (rcAmount ? parseFloat(rcAmount.value) : 0);
+    const countryName = detectedCountryName;
+    const countryCode = detectedCountryCode;
 
-    const flags   = [];
-    let decision = "pass";
-
-    // Check 1: Name
-    if (name.length < 2) {
-        flags.push({ icon: "⚠️", text: "Full name is missing or too short." });
-        if (decision === "pass") decision = "review";
+    // Show loading state on button
+    const btn = runRiskCheckBtn;
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Checking Risk...";
     }
 
-    // Check 2: Email
-    if (!email || !email.includes("@")) {
-        flags.push({ icon: "⚠️", text: "Email address is missing or invalid." });
-        decision = "decline";
-    } else {
-        const domain = email.split("@")[1]?.toLowerCase() || "";
-        if (DISPOSABLE_EMAIL_DOMAINS.includes(domain)) {
-            flags.push({ icon: "🚫", text: `Disposable email domain detected: ${domain}` });
-            decision = "decline";
+    try {
+        const response = await fetch(`${API_URL}/api/onboard`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: name,
+                email: email,
+                phone: phone,
+                amount: amount || 0,
+                country_code: countryCode,
+                country_name: countryName
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error(`API error: ${response.status}`);
         }
-    }
 
-    // Check 3: Phone
-    const phoneDigits = phone.replace(/\D/g, "");
-    if (phoneDigits.length < 7) {
-        flags.push({ icon: "⚠️", text: "Phone number is missing or too short." });
-        if (decision === "pass") decision = "review";
-    }
+        const result = await response.json();
+        
+        // Render result from backend
+        showRiskCheckResult(result.decision, result.flags || []);
 
-    // Check 4: Amount
-    if (!isNaN(amount) && amount > 10000) {
-        flags.push({ icon: "⚠️", text: `High transaction amount: $${amount.toLocaleString()} exceeds $10,000 threshold.` });
-        if (decision === "pass") decision = "review";
-    }
+        // Advance KYC stepper if passed
+        if (result.decision === "pass") {
+            setKycStep(2);
+        }
 
-    // Check 5: High-risk IP country
-    if (HIGH_RISK_COUNTRIES.includes(detectedCountryCode)) {
-        flags.push({ icon: "🚫", text: `Connection from high-risk jurisdiction: ${detectedCountryName} (${detectedCountryCode}).` });
-        decision = "decline";
-    }
-
-    // Render result
-    showRiskCheckResult(decision, flags);
-
-    // Advance KYC stepper if passed
-    if (decision === "pass") {
-        setKycStep(2);
+    } catch (error) {
+        console.error("Risk Check Error:", error);
+        showRiskCheckResult("decline", [{ icon: "❌", text: "Failed to connect to risk engine API." }]);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.textContent = "Run Initial Risk Check";
+        }
     }
 }
 
@@ -2021,8 +2022,8 @@ if (verifySelfieBtn) {
             const formData = new FormData();
             formData.append("file", selectedSelfieFile);
 
-            // Re-using the /verify-document endpoint for the hackathon prototype
-            const response = await fetch(`${API_URL}/verify-document`, {
+            // Use the new /verify-selfie endpoint
+            const response = await fetch(`${API_URL}/verify-selfie`, {
                 method: "POST",
                 body: formData
             });
@@ -2037,7 +2038,7 @@ if (verifySelfieBtn) {
             
             if (result.verified) {
                 if (selfieVerificationResult) {
-                    selfieVerificationResult.innerHTML = `<span class="selfie-status-tag verified">✓ LIVENESS VERIFIED</span>`;
+                    selfieVerificationResult.innerHTML = `<span class="selfie-status-tag verified">✓ LIVENESS VERIFIED (${result.score}%)</span>`;
                 }
                 selfieVerified = true;
                 checkKycCompletion();

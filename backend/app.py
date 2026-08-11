@@ -168,6 +168,50 @@ async def verify_document(
     }
 
 
+# ============================================================
+# SELFIE VERIFICATION API
+# ============================================================
+
+@app.post("/verify-selfie")
+async def verify_selfie(
+    file: UploadFile = File(...)
+):
+
+    if file.content_type not in {"image/jpeg", "image/png"}:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid selfie type. Only JPG and PNG files are allowed."
+        )
+
+    file_bytes = await file.read()
+    file_size = len(file_bytes)
+
+    if file_size == 0:
+        raise HTTPException(status_code=400, detail="The uploaded selfie is empty.")
+
+    if file_size > MAX_DOCUMENT_SIZE:
+        raise HTTPException(status_code=413, detail="File is too large. Maximum allowed size is 5 MB.")
+
+    file_hash = hashlib.sha256(file_bytes).hexdigest()
+
+    # Simulate Liveness & Face Match check
+    liveness_score = round(random.uniform(85.0, 99.9), 1)
+
+    return {
+        "verified": True,
+        "status": "VERIFIED",
+        "score": liveness_score,
+        "message": "Face match and liveness confirmed.",
+        "file": {
+            "name": file.filename,
+            "type": file.content_type,
+            "size": file_size,
+            "size_formatted": format_file_size(file_size),
+            "sha256": file_hash,
+        }
+    }
+
+
 # =========================================================
 # LIVE STATISTICS
 # =========================================================
@@ -228,6 +272,71 @@ class Transaction(BaseModel):
     V28: float
 
     Amount: float
+
+
+class OnboardingRequest(BaseModel):
+    name: str = ""
+    email: str = ""
+    phone: str = ""
+    amount: float = 0.0
+    country_code: str = ""
+    country_name: str = ""
+
+
+# =========================================================
+# ONBOARDING API (RISK CHECK)
+# =========================================================
+
+DISPOSABLE_EMAIL_DOMAINS = {
+    "mailinator.com", "guerrillamail.com", "tempmail.com",
+    "throwam.com", "yopmail.com", "sharklasers.com",
+    "trashmail.com", "getnada.com", "fakeinbox.com",
+    "dispostable.com", "maildrop.cc", "spam4.me"
+}
+
+HIGH_RISK_COUNTRIES = {
+    "AF", "BY", "MM", "CF", "CD", "CU", "ET", "IR", "IQ",
+    "LY", "ML", "NI", "KP", "RU", "SO", "SS", "SD", "SY",
+    "TN", "UG", "UA", "VE", "YE", "ZW"
+}
+
+@app.post("/api/onboard")
+def initial_risk_check(req: OnboardingRequest):
+    flags = []
+    decision = "pass"
+
+    name = req.name.strip()
+    if len(name) < 2:
+        flags.append({"icon": "⚠️", "text": "Full name is missing or too short."})
+        if decision == "pass": decision = "review"
+
+    email = req.email.strip()
+    if not email or "@" not in email:
+        flags.append({"icon": "⚠️", "text": "Email address is missing or invalid."})
+        decision = "decline"
+    else:
+        domain = email.split("@")[1].lower()
+        if domain in DISPOSABLE_EMAIL_DOMAINS:
+            flags.append({"icon": "🚫", "text": f"Disposable email domain detected: {domain}"})
+            decision = "decline"
+
+    phone_digits = "".join(filter(str.isdigit, req.phone))
+    if len(phone_digits) < 7:
+        flags.append({"icon": "⚠️", "text": "Phone number is missing or too short."})
+        if decision == "pass": decision = "review"
+
+    if req.amount > 10000:
+        flags.append({"icon": "⚠️", "text": f"High transaction amount: ${req.amount:,.2f} exceeds $10,000 threshold."})
+        if decision == "pass": decision = "review"
+
+    if req.country_code in HIGH_RISK_COUNTRIES:
+        flags.append({"icon": "🚫", "text": f"Connection from high-risk jurisdiction: {req.country_name} ({req.country_code})."})
+        decision = "decline"
+
+    return {
+        "decision": decision,
+        "flags": flags
+    }
 
 
 # =========================================================
