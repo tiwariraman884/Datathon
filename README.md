@@ -43,9 +43,16 @@ A responsive single-page dashboard with multiple monitoring sections:
 | **Dashboard** | High-level KPIs — total transactions, fraud count, fraud rate |
 | **Transactions** | Live transaction feed with prediction results |
 | **Risk Analysis** | Risk distribution charts and fraud activity breakdown |
-| **System** | Model info, API health, and system status |
+| **Customer Onboarding** | Rule-based risk checks (IP, email, transaction limits) |
+| **Document Verifier** | Upload identity documents (PDF/JPG/PNG) & selfies for liveness checks |
 | **Transaction Analyzer** | Manual transaction feature input → live prediction |
-| **Document Verifier** | Upload and verify supporting documents (PDF/JPG/PNG) |
+| **System** | Model info, API health, and system status |
+
+### 🛡️ KYC & Customer Onboarding
+- **IP Risk Analysis**: Automatic location detection with high-risk jurisdiction flagging
+- **Rule-based Risk Engine**: Checks email domains, phone length, and high-value transactions
+- **Liveness Verification**: Selfie upload and verification capability
+- **Decision Engine**: Automated APPROVE/REVIEW/DECLINE workflows
 
 ### 🔄 Transaction Simulator
 Streams historical transaction records to the backend to simulate live traffic and demonstrate real-time fraud prediction.
@@ -202,7 +209,9 @@ Base URL: `http://127.0.0.1:8000`
 |--------|----------|-------------|
 | `GET` | `/` | Health check — API status |
 | `POST` | `/predict` | Predict fraud/legitimate for a transaction |
+| `POST` | `/api/onboard` | Customer risk check (email, IP, limits) |
 | `POST` | `/verify-document` | Verify uploaded document (PDF/JPG/PNG) |
+| `POST` | `/verify-selfie` | Verify selfie for liveness checks (JPG/PNG) |
 | `GET` | `/stats` | Live fraud detection statistics |
 | `GET` | `/history` | Full transaction prediction history |
 | `GET` | `/transactions` | Recent transactions (latest first) |
@@ -235,7 +244,7 @@ Base URL: `http://127.0.0.1:8000`
 }
 ```
 
-### `POST /verify-document` — Document Verification
+### `POST /verify-document` & `POST /verify-selfie`
 
 **Request:** `multipart/form-data` with a `file` field (PDF, JPG, or PNG — max 5 MB)
 
@@ -253,6 +262,32 @@ Base URL: `http://127.0.0.1:8000`
     "size_formatted": "200.0 KB",
     "sha256": "a3f5c..."
   }
+}
+```
+
+### `POST /api/onboard` — Customer Onboarding Risk Check
+
+**Request body:**
+```json
+{
+  "name": "John Doe",
+  "email": "test@mailinator.com",
+  "phone": "1234567890",
+  "amount": 15000,
+  "country_code": "RU",
+  "country_name": "Russia"
+}
+```
+
+**Response:**
+```json
+{
+  "decision": "decline",
+  "flags": [
+    { "icon": "🚫", "text": "Disposable email domain detected: mailinator.com" },
+    { "icon": "⚠️", "text": "High transaction amount: $15,000.00 exceeds $10,000 threshold." },
+    { "icon": "🚫", "text": "Connection from high-risk jurisdiction: Russia (RU)." }
+  ]
 }
 ```
 
