@@ -3239,3 +3239,72 @@ footer {
 [data-theme="light"] ::-webkit-scrollbar-track { background: #e9eef8; }
 [data-theme="light"] ::-webkit-scrollbar-thumb { background: #b4c0d6; }
 [data-theme="light"] ::-webkit-scrollbar-thumb:hover { background: #8fa3ba; }
+
+/* =========================================================
+   RISK CHECK RESULTS PANEL
+========================================================= */
+
+.risk-check-decision-pass {
+    background: rgba(54, 211, 153, 0.08);
+    border: 1px solid rgba(54, 211, 153, 0.3);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--success);
+    font-weight: 600;
+}
+
+.risk-check-decision-review {
+    background: rgba(255, 184, 77, 0.08);
+    border: 1px solid rgba(255, 184, 77, 0.3);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--warning);
+    font-weight: 600;
+}
+
+.risk-check-decision-decline {
+    background: rgba(255, 92, 103, 0.08);
+    border: 1px solid rgba(255, 92, 103, 0.3);
+    border-radius: var(--radius);
+    padding: var(--space-md);
+    margin-bottom: var(--space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    color: var(--danger);
+    font-weight: 600;
+}
+
+.risk-check-flags-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.risk-check-flag-item {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: var(--space-md);
+    border-radius: var(--radius);
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+}
+
+.risk-check-flag-icon {
+    font-size: 1.2rem;
+}
+
+.risk-check-flag-text {
+    font-size: 14px;
+    color: var(--muted);
+}
+

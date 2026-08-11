@@ -2208,3 +2208,133 @@ function showDocumentVerificationResult(
     }
 
 }
+// =========================================================
+// RISK CHECK PANEL LOGIC
+// =========================================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    const rcCountryInput = document.getElementById("rcCountry");
+    const rcCountryBadge = document.getElementById("rcCountryBadge");
+    const runRiskCheckBtn = document.getElementById("runRiskCheckBtn");
+    const riskCheckResult = document.getElementById("riskCheckResult");
+    
+    // 1. Auto-detect Country via IP
+    async function detectCountry() {
+        if (!rcCountryInput) return;
+        
+        try {
+            const response = await fetch("https://ipapi.co/json/");
+            if (response.ok) {
+                const data = await response.json();
+                rcCountryInput.value = data.country || "US";
+                if (rcCountryBadge) {
+                    rcCountryBadge.textContent = "Auto-detected via IP";
+                }
+            } else {
+                throw new Error("Failed to detect");
+            }
+        } catch (error) {
+            console.error("IP Detection Error:", error);
+            rcCountryInput.value = "US"; // Fallback
+            if (rcCountryBadge) {
+                rcCountryBadge.textContent = "Fallback used";
+            }
+        }
+    }
+
+    // Call detection on load
+    detectCountry();
+
+    // 2. Handle Risk Check Form Submission
+    if (runRiskCheckBtn) {
+        runRiskCheckBtn.addEventListener("click", async () => {
+            const name = document.getElementById("rcName")?.value || "";
+            const email = document.getElementById("rcEmail")?.value || "";
+            const phone = document.getElementById("rcPhone")?.value || "";
+            const amount = parseFloat(document.getElementById("rcAmount")?.value) || 0;
+            const countryCode = document.getElementById("rcCountry")?.value || "US";
+
+            // Basic frontend validation
+            if (!name || !email) {
+                alert("Please fill in Name and Email to run the check.");
+                return;
+            }
+
+            // Set loading state
+            runRiskCheckBtn.textContent = "Analyzing...";
+            runRiskCheckBtn.disabled = true;
+
+            try {
+                const response = await fetch("http://localhost:8000/api/onboard", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        phone: phone,
+                        amount: amount,
+                        country_code: countryCode
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    renderRiskCheckResult(data);
+                } else {
+                    console.error("Risk check API error");
+                    alert("Error reaching the risk assessment engine.");
+                }
+            } catch (error) {
+                console.error("Risk check fetch error:", error);
+                alert("Failed to connect to backend server.");
+            } finally {
+                runRiskCheckBtn.textContent = "Run Initial Risk Check";
+                runRiskCheckBtn.disabled = false;
+            }
+        });
+    }
+
+    // 3. Render the Results
+    function renderRiskCheckResult(data) {
+        if (!riskCheckResult) return;
+
+        const { decision, flags } = data;
+        
+        let decisionHtml = "";
+        if (decision === "pass") {
+            decisionHtml = `<div class="risk-check-decision-pass">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Assessment Passed
+            </div>`;
+        } else if (decision === "review") {
+            decisionHtml = `<div class="risk-check-decision-review">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                Manual Review Required
+            </div>`;
+        } else {
+            decisionHtml = `<div class="risk-check-decision-decline">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                Application Declined
+            </div>`;
+        }
+
+        let flagsHtml = "";
+        if (flags && flags.length > 0) {
+            flagsHtml = `<div class="risk-check-flags-list">
+                ${flags.map(f => `
+                    <div class="risk-check-flag-item">
+                        <div class="risk-check-flag-icon">${f.icon}</div>
+                        <div class="risk-check-flag-text">${f.text}</div>
+                    </div>
+                `).join("")}
+            </div>`;
+        } else {
+            flagsHtml = `<p style="color: var(--muted); font-size: 14px;">No specific risk flags detected during initial scan.</p>`;
+        }
+
+        riskCheckResult.innerHTML = decisionHtml + flagsHtml;
+    }
+});
+
