@@ -72,20 +72,21 @@
     --shadow-lg:     0 8px 32px rgba(17,24,39,0.12), 0 2px 8px rgba(17,24,39,0.06);
 }
 
-/* Light body background — subtle brand gradient */
+/* Light body background — subtle brand gradient with faint blueprint overlay */
 [data-theme="light"] body {
     background:
         radial-gradient(
             ellipse 80% 40% at 85% -10%,
-            rgba(37, 99, 235, 0.07),
+            rgba(37, 99, 235, 0.15),
             transparent
         ),
         radial-gradient(
             ellipse 50% 50% at 10% 110%,
-            rgba(8, 145, 178, 0.06),
+            rgba(8, 145, 178, 0.12),
             transparent
         ),
-        #f1f5fb;
+        linear-gradient(rgba(241, 245, 251, 0.85), rgba(241, 245, 251, 0.85)),
+        url('assets/cyber_bg.png') center/cover fixed;
     color: var(--text);
 }
 
@@ -117,15 +118,16 @@ body {
     background:
         radial-gradient(
             circle at 80% 0%,
-            rgba(50, 212, 255, 0.08),
+            rgba(50, 212, 255, 0.12),
             transparent 28%
         ),
         radial-gradient(
             circle at 20% 20%,
-            rgba(77, 163, 255, 0.06),
+            rgba(77, 163, 255, 0.08),
             transparent 25%
         ),
-        var(--bg);
+        linear-gradient(rgba(10, 15, 28, 0.88), rgba(10, 15, 28, 0.88)),
+        url('assets/cyber_bg.png') center/cover fixed;
 
     color: var(--text);
     min-height: 100vh;
