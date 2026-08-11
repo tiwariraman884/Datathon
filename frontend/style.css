@@ -31,6 +31,7 @@
     /* Typography */
     --font-display: 'Orbitron', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+    --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
 
     /* theme transition speed */
     --theme-transition: 0.3s ease;
@@ -85,7 +86,7 @@
             rgba(8, 145, 178, 0.12),
             transparent
         ),
-        linear-gradient(rgba(241, 245, 251, 0.45), rgba(241, 245, 251, 0.45)),
+        linear-gradient(rgba(241, 245, 251, 0.92), rgba(241, 245, 251, 0.92)),
         url('assets/cyber_bg.png') center/cover fixed;
     color: var(--text);
 }
@@ -113,7 +114,7 @@ html {
 }
 
 body {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
 
     background:
         radial-gradient(
@@ -2926,10 +2927,10 @@ footer {
 }
 
 [data-theme="light"] .nav-item.active {
-    background: linear-gradient(90deg, rgba(37,99,235,0.12), rgba(37,99,235,0.05));
+    background: linear-gradient(90deg, rgba(37,99,235,0.08), rgba(37,99,235,0.02));
     color: #1d4ed8;
     border-color: rgba(37, 99, 235, 0.25);
-    box-shadow: inset 3px 0 0 #2563eb;
+    box-shadow: inset 3px 0 0 #2563eb, 0 4px 12px rgba(37, 99, 235, 0.08);
     font-weight: 600;
 }
 
