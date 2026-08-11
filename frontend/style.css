@@ -28,6 +28,10 @@
     --space-2xl: 48px;
     --space-3xl: 64px;
 
+    /* Typography */
+    --font-display: 'Orbitron', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+
     /* theme transition speed */
     --theme-transition: 0.3s ease;
 }
@@ -108,14 +112,7 @@ html {
 }
 
 body {
-    font-family:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
+    font-family: var(--font-mono);
 
     background:
         radial-gradient(
@@ -139,6 +136,54 @@ body {
     text-rendering: optimizeLegibility;
     text-align: left;
 }
+
+/* ── Typography Enhancements ────────────────────────── */
+h1, h2, h3, h4, h5, h6,
+.eyebrow, .section-label, .primary-btn {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+h1 {
+    text-shadow: 0 0 10px rgba(50, 212, 255, 0.2);
+    letter-spacing: 0.02em;
+}
+
+[data-theme="light"] h1 {
+    text-shadow: 0 0 15px rgba(37, 99, 235, 0.15);
+}
+
+strong, b {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.nav-item, .refresh-btn, .kpi-card span {
+    letter-spacing: 0.03em;
+}
+
+th {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 700;
+}
+
+.live-badge, .prediction-badge, .risk-badge, .document-status-badge, .ip-risk-badge {
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* Ensure KPI numbers use monospace for technical terminal feel */
+.kpi-card h2 {
+    font-family: var(--font-mono);
+    letter-spacing: -0.02em;
+}
+
+
 
 /* =========================================================
    SIDEBAR
