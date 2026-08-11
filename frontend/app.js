@@ -1,6 +1,42 @@
 const API_URL = "http://127.0.0.1:8000";
 
 // =========================================================
+// THEME TOGGLE
+// =========================================================
+
+(function initTheme() {
+    const html        = document.documentElement;
+    const btn         = document.getElementById("themeToggleBtn");
+    const STORAGE_KEY = "cs-theme";
+
+    // Apply saved theme immediately (before paint) to avoid flash
+    const saved = localStorage.getItem(STORAGE_KEY) || "dark";
+    html.setAttribute("data-theme", saved);
+    if (btn) btn.textContent = saved === "light" ? "☀️" : "🌙";
+
+    if (!btn) return;
+
+    btn.addEventListener("click", () => {
+        const current = html.getAttribute("data-theme") || "dark";
+        const next    = current === "dark" ? "light" : "dark";
+
+        html.setAttribute("data-theme", next);
+        localStorage.setItem(STORAGE_KEY, next);
+
+        // Spin animation
+        btn.style.transform = "scale(0.85) rotate(360deg)";
+        btn.style.transition = "transform 0.4s cubic-bezier(0.34,1.56,0.64,1)";
+        btn.textContent = next === "light" ? "☀️" : "🌙";
+
+        setTimeout(() => {
+            btn.style.transform = "";
+            btn.style.transition = "";
+        }, 420);
+    });
+})();
+
+
+// =========================================================
 // DOM ELEMENTS
 // =========================================================
 
